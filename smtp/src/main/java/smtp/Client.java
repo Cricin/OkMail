@@ -1,9 +1,12 @@
 package smtp;
 
-import smtp.internal.hook.HookerAdapter;
-import smtp.internal.SystemMxDns;
+import okhttp3.internal.Util;
+import smtp.internal.dns.DnsJavaMxDns;
+import smtp.internal.dns.SystemMxDns;
+import smtp.internal.hook.HookerComposite;
 
 import javax.net.SocketFactory;
+import java.util.concurrent.*;
 
 /**
  * A mail client which allow user send e-mail or any attachment
@@ -15,6 +18,7 @@ public final class Client implements Session.SessionFactory {
   final MxDns mxDns;
   final SocketFactory socketFactory;
   final Hooker hooker;
+  final Executor executor;
 
   /**
    * use all default settings to build an client
@@ -26,24 +30,40 @@ public final class Client implements Session.SessionFactory {
   /*package*/Client(Builder builder) {
     mxDns = builder.mxDns;
     socketFactory = builder.socketFactory;
-    hooker = builder.hooker;
+    hooker = builder.hookers;
+    executor = builder.executor;
   }
 
   public MxDns mxDns() {
     return mxDns;
   }
 
-  public Session newSession(Mail mail) {
-    return null;//TODO
+  public Hooker hooker() {
+    return hooker;
   }
 
+  public SocketFactory socketFactory() {
+    return socketFactory;
+  }
+
+  @Override
+  public Session newSession(Mail mail) {
+    return RealSession.newRealSession(this, mail);
+  }
 
   /**********************builder*************************/
 
   public static class Builder {
-    MxDns mxDns = new SystemMxDns();
+
+    MxDns mxDns = DnsJavaMxDns.isAvailable() ? new DnsJavaMxDns() : new SystemMxDns();
     SocketFactory socketFactory = SocketFactory.getDefault();
-    Hooker hooker = new HookerAdapter();
+    HookerComposite hookers = new HookerComposite();
+    Executor executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60, TimeUnit.SECONDS,
+            new SynchronousQueue<>(), command -> {
+      Thread thread = new Thread(command);
+      thread.setDaemon(true);
+      return thread;
+    });
 
     public Builder() {
     }
@@ -58,8 +78,13 @@ public final class Client implements Session.SessionFactory {
       return this;
     }
 
-    public Builder hooker(Hooker hooker) {
-      this.hooker = hooker;
+    public Builder addHooker(Hooker hooker) {
+      hookers.addHooker(hooker);
+      return this;
+    }
+
+    public Builder executor(Executor executor) {
+      this.executor = executor;
       return this;
     }
 

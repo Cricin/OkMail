@@ -1,12 +1,14 @@
 package smtp;
 
+import smtp.internal.dns.SystemMxDns;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
 /**
  * A domain name service that resolves IP addresses for host names by DNS MX RECORD.
- * Most applications will use the {@link smtp.internal.SystemMxDns DNS service}.
+ * Most applications will use the {@link SystemMxDns DNS service}.
  * Some applications may provide their own implementation to use a different DNS server,
  * to prefer IPv6 addresses,to prefer IPv4 addresses, or to force a specific known IP
  * address.

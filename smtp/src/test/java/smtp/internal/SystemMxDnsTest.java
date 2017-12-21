@@ -1,9 +1,8 @@
 package smtp.internal;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import smtp.internal.dns.SystemMxDns;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

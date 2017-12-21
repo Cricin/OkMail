@@ -1,5 +1,7 @@
 package smtp;
 
+import smtp.internal.Utils;
+
 import javax.annotation.Nullable;
 import java.util.Objects;
 
@@ -10,9 +12,18 @@ public class Response {
   private int[] codes;
   private String[] responses;
 
-  Response(int code, String message) {
+  private Response(int code, String message) {
     this.code = code;
     this.message = message;
+  }
+
+  public boolean containsCode(int code) {
+    if (codes != null) {
+      for (int i : codes) {
+        if (i == code) return true;
+      }
+    }
+    return false;
   }
 
   @Override
@@ -22,19 +33,19 @@ public class Response {
     }
     if (obj instanceof Response) {
       Response other = (Response) obj;
-      return code == other.code && Objects.equals(message, other.message);
+      return code == other.code && Utils.equals(message, other.message);
     }
     return false;
   }
 
   public boolean isMultiline() {
-    return false; //TODO support multiline response
+    return codes == null;
   }
 
   @Override
   public int hashCode() {
     int out = 17 + 31 * code;
-    out += message == null ? 0 : message.hashCode();
+    out += Utils.hashCode(message);
     return out;
   }
 
@@ -52,4 +63,12 @@ public class Response {
   public static Response of(int code, String message) {
     return new Response(code, message);
   }
+
+  public static Response parseRaw(byte[] raw) {
+    boolean multiline = (int) raw[3] == 45;
+
+
+    return null;
+  }
+
 }

@@ -1,4 +1,4 @@
-package smtp.internal;
+package smtp.internal.dns;
 
 import smtp.MxDns;
 

@@ -1,13 +1,13 @@
 package smtp;
 
 /**
- * All smtp protocol command supported by OkMail implementation
+ * All smtp protocol interceptor supported by OkMail implementation
  * <p>
  * smtp的command是不区分大小写的，但是参数可能会区分大小写(如用户名)
  *
  * <CRLF> --> \r\n
  */
-public enum Command {
+public enum Commands {
 
   /*
   * helo 命令用来向服务器表明身份，只是一个简单的确认，参数是没有限制的
@@ -69,5 +69,14 @@ public enum Command {
    * NOOP<CRLF>
    */
   NOOP,
+
+  //extended
+
+  /*
+   * ESMTP
+   */
+  EHLO,
+
+
 
 }

@@ -1,4 +1,4 @@
-package smtp.internal;
+package smtp.internal.dns;
 
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.MXRecord;
@@ -42,6 +42,16 @@ public final class DnsJavaMxDns implements MxDns {
       throw new UnknownHostException("Could not resolve DNS mx record of host: " + hostname);
     }
     return out;
+  }
+
+  //test if we have dnsjava in classpath
+  public static boolean isAvailable() {
+    try {
+      Class.forName("org.xbill.DNS.Lookup");
+    } catch (ClassNotFoundException ignore) {
+      return false;
+    }
+    return true;
   }
 
 }
