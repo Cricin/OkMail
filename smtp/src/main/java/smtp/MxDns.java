@@ -1,6 +1,6 @@
 package smtp;
 
-import smtp.internal.dns.SystemMxDns;
+import smtp.internal.connection.SystemMxDns;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

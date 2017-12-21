@@ -7,4 +7,8 @@ import java.io.OutputStream;
 
 public interface Sink extends Closeable, Flushable {
 
+  int read() throws IOException;
+
+  byte[] readLine() throws IOException;
+
 }

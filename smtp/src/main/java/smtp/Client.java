@@ -1,8 +1,7 @@
 package smtp;
 
-import okhttp3.internal.Util;
-import smtp.internal.dns.DnsJavaMxDns;
-import smtp.internal.dns.SystemMxDns;
+import smtp.internal.connection.DnsJavaMxDns;
+import smtp.internal.connection.SystemMxDns;
 import smtp.internal.hook.HookerComposite;
 
 import javax.net.SocketFactory;

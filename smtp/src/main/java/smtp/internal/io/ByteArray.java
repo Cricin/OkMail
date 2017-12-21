@@ -2,6 +2,8 @@ package smtp.internal.io;
 
 import javax.annotation.Nullable;
 
+//todo make this more useful and memory efficiently
+
 public class ByteArray {
 
   private int[] arr;

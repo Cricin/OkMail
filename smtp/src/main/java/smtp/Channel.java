@@ -1,15 +1,23 @@
 package smtp;
 
+import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * a channel hold all lower level connection resources
+ */
 public interface Channel {
 
+  @Nonnull
   Socket socket();
 
-  InputStream inputStream();
+  @Nonnull
+  InputStream inputStream() throws IOException;
 
-  OutputStream outputStream();
+  @Nonnull
+  OutputStream outputStream() throws IOException;
 
 }

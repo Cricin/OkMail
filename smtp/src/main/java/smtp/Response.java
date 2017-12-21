@@ -1,11 +1,13 @@
 package smtp;
 
-import smtp.internal.Utils;
+import smtp.internal.Util;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public class Response {
+
+  public static final Response EMPTY = null; //todo
+
 
   private int code;
   private String message;
@@ -33,7 +35,7 @@ public class Response {
     }
     if (obj instanceof Response) {
       Response other = (Response) obj;
-      return code == other.code && Utils.equals(message, other.message);
+      return code == other.code && Util.equals(message, other.message);
     }
     return false;
   }
@@ -45,7 +47,7 @@ public class Response {
   @Override
   public int hashCode() {
     int out = 17 + 31 * code;
-    out += Utils.hashCode(message);
+    out += Util.hashCode(message);
     return out;
   }
 

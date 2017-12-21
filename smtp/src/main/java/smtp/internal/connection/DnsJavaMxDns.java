@@ -1,4 +1,4 @@
-package smtp.internal.dns;
+package smtp.internal.connection;
 
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.MXRecord;

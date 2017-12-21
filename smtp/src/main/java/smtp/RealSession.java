@@ -2,8 +2,8 @@ package smtp;
 
 import smtp.internal.RealInterceptorChain;
 import smtp.internal.command.Command;
-import smtp.internal.interceptor.ConnectInterceptor;
-import smtp.internal.interceptor.ValidateInterceptor;
+import smtp.internal.connection.ConnectInterceptor;
+import smtp.internal.ValidateInterceptor;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
