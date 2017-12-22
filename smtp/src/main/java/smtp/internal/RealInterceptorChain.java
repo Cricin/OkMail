@@ -16,7 +16,7 @@ public class RealInterceptorChain implements Interceptor.Chain {
   private Session session;
   private int index;
 
-  //lazy settle
+  //lazy settle the channel will be available only ConnectInterceptor intercepted!
   private Channel channel;
 
   private Mail mail;
@@ -24,7 +24,7 @@ public class RealInterceptorChain implements Interceptor.Chain {
   public RealInterceptorChain(Session session, List<Interceptor> interceptors) {
     this.interceptors = interceptors;
     this.session = session;
-    index = 0;
+    this.index = 0;
   }
 
   @Override
@@ -57,7 +57,7 @@ public class RealInterceptorChain implements Interceptor.Chain {
 
   //this should only be called by ConnectInterceptor
   //before any Command
-  public void setChannel(Channel channel) {
+  public final void setChannel(Channel channel) {
     this.channel = channel;
   }
 

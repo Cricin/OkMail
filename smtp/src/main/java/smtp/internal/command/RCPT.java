@@ -1,6 +1,9 @@
 package smtp.internal.command;
 
+import smtp.Mail;
 import smtp.MailException;
+import smtp.internal.io.Sink;
+import smtp.internal.io.Source;
 
 public class RCPT extends Command {
   @Override
@@ -9,12 +12,17 @@ public class RCPT extends Command {
   }
 
   @Override
-  protected void doCommand() throws MailException {
+  protected void doCommand(Sink sink, Source source) throws MailException {
 
   }
 
   @Override
   public boolean shouldRecall() {
+    Mail mail = mail();
+
+
+
+
     return super.shouldRecall();
   }
 }

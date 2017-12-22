@@ -1,39 +1,35 @@
 package smtp.internal.io;
 
-import javax.annotation.Nullable;
+/**
+ * ByteArray is same as List<Byte>, but more memory efficient
+ * without auto-boxing
+ */
+public interface ByteArray {
 
-//todo make this more useful and memory efficiently
+  boolean isEmpty();
 
-public class ByteArray {
+  int size();
 
-  private int[] arr;
-  private int index;
-  private int byteShift;
+  byte[] toArray();
 
-  public ByteArray(int size) {
-    arr = new int[size];
-    byteShift = 0xFF000000;
-  }
+  void add(byte b);
 
-  public void add(byte b) {
-    arr[index] = arr[index] & byteShift;
-    byteShift >>= 8;
-    if (byteShift == 0) {
-      byteShift = 0xFF000000;
-      index++;
-    }
-  }
+  void addAll(byte[] in);
 
-  public void add(int b) {
-    add((byte) b);
-  }
+  void addAll(ByteArray other);
 
-  @Nullable
-  public byte[] toBytes() {
-    if (index == 0 && byteShift == 0) {
-      return null;
-    }
+  void clear();
 
-    return null;
-  }
+  byte get(int index);
+
+  void set(int index, byte value);
+
+  int indexOf(byte b);
+
+  int lastIndexOf(byte b);
+
+  ByteArray subArray(int fromIndex, int toIndex);
+
+  void deAllocate();
+
 }

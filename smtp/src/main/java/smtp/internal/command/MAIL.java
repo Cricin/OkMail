@@ -1,6 +1,8 @@
 package smtp.internal.command;
 
 import smtp.MailException;
+import smtp.internal.io.Sink;
+import smtp.internal.io.Source;
 
 public class MAIL extends Command {
   @Override
@@ -9,7 +11,7 @@ public class MAIL extends Command {
   }
 
   @Override
-  protected void doCommand() throws MailException {
+  protected void doCommand(Sink sink, Source source) throws MailException {
 
   }
 }

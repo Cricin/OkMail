@@ -3,45 +3,75 @@ package smtp;
 import org.junit.Test;
 import smtp.internal.codec.Base64;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.*;
 
 public class SocketSendMailTest {
 
+  BufferedReader reader = null;
+
   @Test
   public void sendMain() throws IOException {
     Socket socket = new Socket();
-    InetAddress address = InetAddress.getByName("Smtp.126.com");
+    InetAddress address = InetAddress.getByName("smtp.126.com");
     socket.connect(new InetSocketAddress(address, 25));
     OutputStream out = socket.getOutputStream();
+    reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
     PrintWriter writer = new PrintWriter(out);
 
-    writer.append("helo cricin\n");
-    writer.append("auth login\n");
+    readLine();
+    writer.append("helo cricin\r\n");
+    writer.flush();
+    readLine();
+
+    writer.append("auth login\r\n");
+    writer.flush();
+    readLine();
 
     writer.append(Base64.encode("cricin@126.com".getBytes()));
-    writer.append('\n');
+    writer.append("\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
 
     writer.append(Base64.encode("t150h0550s4431".getBytes()));
-    writer.append('\n');
-    writer.append("MAIL FROM:<cricin@126.com>\n");
-    writer.append("RCPT TO:<cricin@qq.com>\n");
-    writer.append("DATA\n");
-    writer.append("subject: test subject\n");
-    writer.append("from:<cricin@126.com>\n");
-    writer.append("to:<cricin@qq.com>\n");
-    writer.append("\n");
-    writer.append("test body\n");
+    writer.append("\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
 
-    writer.append(".\n");
+    writer.append("MAIL FROM:<cricin@126.com>\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
 
-    writer.append("quit\n");
+    writer.append("RCPT TO:<cricin@cricin.cn>\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
 
+    writer.append("DATA\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
+
+    writer.append("Subject: test subject\r\n");
+    writer.append("from:<cricin@126.com>\r\n");
+    writer.append("to:<cricin@cricin.cn>\r\n");
+    writer.append("\r\n");
+    writer.append("test body\r\n");
+    writer.append(".\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
+
+    writer.append("quit\r\n");
+    writer.flush();
+    System.out.println(reader.readLine());
+
+    reader.close();
+    reader = null;
     writer.close();
     socket.close();
   }
 
+  public void readLine() throws IOException {
+    System.out.println(reader.readLine());
+  }
 
 }

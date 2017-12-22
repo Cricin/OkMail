@@ -9,6 +9,8 @@ import smtp.MxDns;
 import smtp.Response;
 import smtp.internal.RealInterceptorChain;
 import smtp.internal.Util;
+import smtp.internal.io.Sink;
+import smtp.internal.io.Source;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,7 +46,18 @@ public class ConnectInterceptor implements Interceptor {
     }
     Socket socket = findHealthySocket(addresses);
     if (socket == null) throw new MailException("can not connected to any mail server");
+    InputStream in;
+    OutputStream out;
+    try {
+      in = socket.getInputStream();
+      out = socket.getOutputStream();
+    } catch (IOException e) {
+      throw new MailException("error opening socket stream");
+    }
     realChain.setChannel(new Channel() {
+
+      private Sink sink;
+      private Source source;
 
       @Override
       @Nonnull
@@ -54,20 +67,38 @@ public class ConnectInterceptor implements Interceptor {
 
       @Override
       @Nonnull
-      public InputStream inputStream() throws IOException {
-        return socket().getInputStream();
+      public InputStream inputStream() {
+        return in;
       }
 
       @Override
       @Nonnull
-      public OutputStream outputStream() throws IOException {
-        return socket().getOutputStream();
+      public OutputStream outputStream() {
+        return out;
+      }
+
+      @Nonnull
+      @Override
+      public Sink sink() {
+        if (sink == null) {
+          sink = Sink.wrap(outputStream());
+        }
+        return sink;
+      }
+
+      @Nonnull
+      @Override
+      public Source source() {
+        if (source == null) {
+          source = Source.wrap(inputStream());
+        }
+        return source;
       }
     });
-    Response out = chain.proceed(mail);
+    Response response = chain.proceed(mail);
     //close any socket resource...
     Util.closeQuietly(socket);
-    return out;
+    return response;
   }
 
   @Nullable

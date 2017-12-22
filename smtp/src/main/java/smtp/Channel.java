@@ -1,5 +1,8 @@
 package smtp;
 
+import smtp.internal.io.Sink;
+import smtp.internal.io.Source;
+
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,7 +10,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * a channel hold all lower level connection resources
+ * a channel holds all lower level connection resources
  */
 public interface Channel {
 
@@ -15,9 +18,15 @@ public interface Channel {
   Socket socket();
 
   @Nonnull
-  InputStream inputStream() throws IOException;
+  InputStream inputStream();
 
   @Nonnull
-  OutputStream outputStream() throws IOException;
+  OutputStream outputStream();
+
+  @Nonnull
+  Sink sink();
+
+  @Nonnull
+  Source source();
 
 }
