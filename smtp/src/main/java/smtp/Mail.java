@@ -8,26 +8,26 @@ import java.util.List;
 public final class Mail {
 
   private final Mailbox from;
-  private final Mailbox to;
+  private final List<Mailbox> recipients;
+  private final String password;
   private final List<Mailbox> carbonCopy;
   private final Headers headers;
-  private final String subject;
   private final String content;
 
 
   private Mail(Builder builder) {
     from = builder.from;
-    to = builder.to;
+    password = builder.password;
     headers = builder.headers.build();
-    subject = builder.subject;
     content = builder.content;
+    recipients = Collections.unmodifiableList(new ArrayList<>(builder.recipients));
 
     if (!builder.carbonCopy.isEmpty()) {
       List<Mailbox> temp = new ArrayList<>(builder.carbonCopy.size());
       temp.addAll(builder.carbonCopy);
       carbonCopy = Collections.unmodifiableList(temp);
     } else {
-      carbonCopy = null;
+      carbonCopy = Collections.emptyList();
     }
   }
 
@@ -35,12 +35,8 @@ public final class Mail {
     return from;
   }
 
-  public Mailbox to() {
-    return to;
-  }
-
-  public String subject() {
-    return subject;
+  public List<Mailbox> recipients() {
+    return recipients;
   }
 
   public String content() {
@@ -54,10 +50,11 @@ public final class Mail {
   public Builder newBuilder() {
     Builder out = new Builder();
     out.from = from;
-    out.to = to;
+    out.recipients.addAll(recipients);
     out.carbonCopy.addAll(carbonCopy);
-    out.subject = subject;
     out.content = content;
+    out.headers = headers.newBuilder();
+    out.password = password;
     //todo add other field
     return out;
   }
@@ -66,10 +63,13 @@ public final class Mail {
   public String toString() {
     StringBuilder out = new StringBuilder(256);
     out.append("From: <").append(from).append(">\n");
-    out.append("To: <").append(to).append(">\n");
-    out.append("Subject: ").append(subject).append('\n');
+    out.append("To: <").append(recipients).append(">\n");
     out.append(headers);
     return out.toString();
+  }
+
+  public String password() {
+    return password;
   }
 
   /**********************builder*************************/
@@ -77,28 +77,35 @@ public final class Mail {
   public static class Builder {
 
     private Mailbox from;
-    private Mailbox to;
+    private HashSet<Mailbox> recipients = new HashSet<>();
     private HashSet<Mailbox> carbonCopy = new HashSet<>();
-    private String subject;
     private Headers.Builder headers = new Headers.Builder();
     private String content;
+    private String password;
 
     public Builder() {
     }
 
     // sender mail address
     public Builder from(Mailbox from) {
+      this.from = from;
       return this;
     }
 
     // receiver mail address
-    public Builder to(Mailbox to) {
+    public Builder addRecipient(Mailbox recipient) {
+      recipients.add(recipient);
       return this;
     }
 
     // carbon copy mail address(抄送,可以添加多个)
     public Builder cc(Mailbox cc) {
       carbonCopy.add(cc);
+      return this;
+    }
+
+    public Builder password(String password) {
+      this.password = password;
       return this;
     }
 
@@ -118,7 +125,7 @@ public final class Mail {
     }
 
     public Builder subject(String subject) {
-      this.subject = subject;
+      this.headers.add("Subject", subject);
       return this;
     }
 
@@ -129,7 +136,7 @@ public final class Mail {
 
     public Mail build() {
       if (from == null) throw new IllegalStateException("from == null");
-      if (to == null) throw new IllegalStateException("to == null");
+      if (recipients.isEmpty()) throw new IllegalStateException("no recipients");
       return new Mail(this);
     }
 

@@ -12,9 +12,13 @@ public interface ByteArray {
 
   byte[] toArray();
 
+  byte[] toArray(int from, int count);
+
   void add(byte b);
 
   void addAll(byte[] in);
+
+  void addAll(byte[] in, int offset, int count);
 
   void addAll(ByteArray other);
 
@@ -25,6 +29,8 @@ public interface ByteArray {
   void set(int index, byte value);
 
   int indexOf(byte b);
+
+  int indexOf(int startIndex, byte b);
 
   int lastIndexOf(byte b);
 

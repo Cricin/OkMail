@@ -1,5 +1,7 @@
 package smtp.internal;
 
+import smtp.internal.io.ByteArray;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -9,8 +11,15 @@ import java.nio.charset.Charset;
  */
 public final class Util {
 
+  public static final byte CR = 13;
+  public static final byte LF = 10;
+  public static final byte SP = 32;
+  public static final byte DASH = 45;
+  public static final byte DOT = 46;
+
   public static final Charset UTF_8 = Charset.forName("UTF-8");
   public static final Charset ASCII = Charset.forName("ASCII");
+
 
   public static boolean equals(Object a, Object b) {
     if (a == null) return b == null;
@@ -27,7 +36,7 @@ public final class Util {
       c.close();
     } catch (RuntimeException e) {
       throw e;
-    } catch (IOException ignore) {
+    } catch (Exception ignore) {
     }
   }
 
@@ -37,7 +46,7 @@ public final class Util {
    * @param ascii the raw ascii value
    * @return the decoded int value
    */
-  public static int asciiToInt(int ascii) {
+  private static int asciiToInt(int ascii) {
     if (ascii < 48 || ascii > 57) {
       return -1;
     } else {
@@ -45,4 +54,13 @@ public final class Util {
     }
   }
 
+  public static int readCode(String line) {
+    int value = asciiToInt(line.charAt(0)) * 100;
+    value += asciiToInt(line.charAt(1)) * 10;
+    return value + asciiToInt(line.charAt(2));
+  }
+
+  public static String readMessage(String rawResponse) {
+    return rawResponse.substring(4);
+  }
 }

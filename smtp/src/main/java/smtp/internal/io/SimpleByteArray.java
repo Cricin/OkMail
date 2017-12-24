@@ -34,6 +34,14 @@ public class SimpleByteArray implements ByteArray {
   }
 
   @Override
+  public byte[] toArray(int from, int count) {
+    if (from < 0 || from + count > size) {
+      throw new IndexOutOfBoundsException();
+    }
+    return Arrays.copyOfRange(data, from, from + count);
+  }
+
+  @Override
   public void add(byte b) {
     growIfNeeded(1);
     data[size] = b;
@@ -46,6 +54,15 @@ public class SimpleByteArray implements ByteArray {
     growIfNeeded(in.length);
     System.arraycopy(in, 0, data, size, in.length);
     size += in.length;
+  }
+
+  @Override
+  public void addAll(byte[] in, int offset, int count) {
+    if (in.length == 0) return;
+    if (offset < 0) throw new IndexOutOfBoundsException();
+    if (offset + count > in.length) throw new IndexOutOfBoundsException();
+    growIfNeeded(count);
+    System.arraycopy(in, offset, data, size, count);
   }
 
   @Override
@@ -79,6 +96,19 @@ public class SimpleByteArray implements ByteArray {
   public int indexOf(byte b) {
     for (int i = 0; i < data.length; i++) {
       if (data[i] == b) return i;
+    }
+    return -1;
+  }
+
+  @Override
+  public int indexOf(int startIndex, byte b) {
+    if (startIndex > size) {
+      throw new IndexOutOfBoundsException();
+    }
+    for (int i = startIndex; i < size; i++) {
+      if (data[i] == b) {
+        return i;
+      }
     }
     return -1;
   }

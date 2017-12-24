@@ -77,6 +77,19 @@ public final class Client implements Session.SessionFactory {
       return this;
     }
 
+    public Builder connectTimeout(long timeoutMillis) {
+      return this;
+    }
+
+
+    public Builder readTimeout(long timeoutMillis) {
+      return this;
+    }
+
+    public Builder writeTimeout(long timeoutMillis) {
+      return this;
+    }
+
     public Builder addHooker(Hooker hooker) {
       hookers.addHooker(hooker);
       return this;

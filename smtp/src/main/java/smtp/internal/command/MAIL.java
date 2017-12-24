@@ -1,17 +1,39 @@
 package smtp.internal.command;
 
-import smtp.MailException;
-import smtp.internal.io.Sink;
-import smtp.internal.io.Source;
+import okio.BufferedSink;
+import okio.BufferedSource;
+import smtp.Mail;
+import smtp.Response;
+import smtp.Server;
+import smtp.internal.Util;
+
+import java.io.IOException;
 
 public class MAIL extends Command {
-  @Override
-  public String name() {
-    return "MAIL";
-  }
+
+  private static final String NAME = "MAIL";
+  private static final String PARAM = "FROM:";
 
   @Override
-  protected void doCommand(Sink sink, Source source) throws MailException {
+  protected void doCommand(Chain chain,
+                           BufferedSink sink,
+                           BufferedSource source,
+                           Mail mail,
+                           Server server) throws IOException {
+    sink.writeUtf8(NAME)
+            .writeByte(Util.SP)
+            .writeUtf8(PARAM)
+            .writeUtf8(mail.from().canonical())
+            .writeByte(Util.CR)
+            .writeByte(Util.LF)
+            .flush();
 
+    Response next = readResponse(source);
+    final int code = next.code();
+    if (code != 250) {
+      throwErrorCode(code, next.message());
+    }
   }
+
+
 }

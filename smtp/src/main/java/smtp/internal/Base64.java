@@ -18,7 +18,7 @@
 /**
  * @author Alexander Y. Kleymenov
  */
-package smtp.internal.codec;
+package smtp.internal;
 
 import java.io.UnsupportedEncodingException;
 

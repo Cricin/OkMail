@@ -2,7 +2,6 @@ package smtp.internal;
 
 import org.junit.Assert;
 import org.junit.Test;
-import smtp.internal.codec.Base64;
 
 import java.nio.charset.Charset;
 

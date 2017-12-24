@@ -1,13 +1,9 @@
 package smtp.internal;
 
-import smtp.Channel;
-import smtp.Interceptor;
-import smtp.Mail;
-import smtp.MailException;
-import smtp.Response;
-import smtp.Session;
+import smtp.*;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.util.List;
 
 public class RealInterceptorChain implements Interceptor.Chain {
@@ -19,6 +15,9 @@ public class RealInterceptorChain implements Interceptor.Chain {
   //lazy settle the channel will be available only ConnectInterceptor intercepted!
   private Channel channel;
 
+
+  private Server server;
+
   private Mail mail;
 
   public RealInterceptorChain(Session session, List<Interceptor> interceptors) {
@@ -28,13 +27,12 @@ public class RealInterceptorChain implements Interceptor.Chain {
   }
 
   @Override
-  public Response proceed(@Nonnull Mail mail) throws MailException {
+  public Response proceed(@Nonnull Mail mail) throws IOException {
     this.mail = mail;
     Response response = null;
     if (index < interceptors.size()) {
-      final Interceptor i = interceptors.get(index);
-      response = i.intercept(this);
-      index++;
+      final Interceptor i = interceptors.get(index++);
+       i.intercept(this);
     }
     return response;
   }
@@ -61,5 +59,12 @@ public class RealInterceptorChain implements Interceptor.Chain {
     this.channel = channel;
   }
 
+  public Server server() {
+    return server;
+  }
+
+  public final void setServer(Server server) {
+    this.server = server;
+  }
 
 }

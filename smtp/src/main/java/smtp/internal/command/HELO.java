@@ -1,21 +1,36 @@
 package smtp.internal.command;
 
-import smtp.MailException;
-import smtp.internal.io.Sink;
-import smtp.internal.io.Source;
+import okio.BufferedSink;
+import okio.BufferedSource;
+import smtp.Mail;
+import smtp.Response;
+import smtp.Server;
+import smtp.internal.Util;
+
+import java.io.IOException;
 
 public class HELO extends Command {
 
-  @Override
-  public String name() {
-    return "HELO";
-  }
+  public static final String NAME = "HELO";
+  private static final String EHLO_MESSAGE = "OkMail-0.0.1";
 
   @Override
-  protected void doCommand(Sink sink, Source source) throws MailException {
+  protected void doCommand(Chain chain,
+                           BufferedSink sink,
+                           BufferedSource source,
+                           Mail mail,
+                           Server server) throws IOException {
 
+    sink.writeUtf8(NAME)
+            .writeByte(Util.SP)
+            .writeUtf8(EHLO_MESSAGE)
+            .writeByte(Util.CR)
+            .writeByte(Util.LF)
+            .flush();
 
-
-
+    Response next = readResponse(source);
+    if (next.code() != 250) {
+      throwErrorCode(next.code(), "server not response 250 code");
+    }
   }
 }

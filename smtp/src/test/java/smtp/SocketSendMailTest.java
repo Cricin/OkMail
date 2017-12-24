@@ -1,7 +1,7 @@
 package smtp;
 
 import org.junit.Test;
-import smtp.internal.codec.Base64;
+import smtp.internal.Base64;
 
 import java.io.*;
 import java.net.*;

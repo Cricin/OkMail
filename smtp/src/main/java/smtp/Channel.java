@@ -1,7 +1,7 @@
 package smtp;
 
-import smtp.internal.io.Sink;
-import smtp.internal.io.Source;
+import okio.Sink;
+import okio.Source;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -18,15 +18,9 @@ public interface Channel {
   Socket socket();
 
   @Nonnull
-  InputStream inputStream();
+  Sink sink() throws IOException;
 
   @Nonnull
-  OutputStream outputStream();
-
-  @Nonnull
-  Sink sink();
-
-  @Nonnull
-  Source source();
+  Source source() throws IOException;
 
 }

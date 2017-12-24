@@ -21,10 +21,4 @@ sourceSets {
 
   }
 
-  demo{
-
-
-
-  }
-
 }

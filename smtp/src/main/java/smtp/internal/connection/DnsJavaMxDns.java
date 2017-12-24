@@ -35,7 +35,7 @@ public final class DnsJavaMxDns implements MxDns {
           }
         }
       }
-    } catch (TextParseException e) {
+    } catch (Exception e) {
       //ignore
     }
     if (out.isEmpty()) {
@@ -47,7 +47,7 @@ public final class DnsJavaMxDns implements MxDns {
   //test if we have dnsjava in classpath
   public static boolean isAvailable() {
     try {
-      Class.forName("org.xbill.DNS.Lookup");
+      Class.forName("org.xbill.DNS.MXRecord");
     } catch (ClassNotFoundException ignore) {
       return false;
     }

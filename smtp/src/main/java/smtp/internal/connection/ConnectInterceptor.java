@@ -1,16 +1,15 @@
 package smtp.internal.connection;
 
+import okio.Okio;
+import okio.Sink;
+import okio.Source;
 import smtp.Channel;
 import smtp.Interceptor;
 import smtp.Mail;
-import smtp.MailException;
 import smtp.Mailbox;
 import smtp.MxDns;
-import smtp.Response;
 import smtp.internal.RealInterceptorChain;
 import smtp.internal.Util;
-import smtp.internal.io.Sink;
-import smtp.internal.io.Source;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +33,7 @@ public class ConnectInterceptor implements Interceptor {
   }
 
   @Override
-  public Response intercept(@Nonnull Chain chain) throws MailException {
+  public void intercept(@Nonnull Chain chain) throws IOException {
     RealInterceptorChain realChain = (RealInterceptorChain) chain;
     final Mail mail = chain.mail();
     final Mailbox from = mail.from();
@@ -42,17 +41,17 @@ public class ConnectInterceptor implements Interceptor {
     try {
       addresses = mxDns.lookup(from.host());
     } catch (UnknownHostException e) {
-      throw new MailException("can not find any DNS mx record address with host: " + from.host());
+      throw new IOException("can not find any DNS mx record address with host: " + from.host());
     }
     Socket socket = findHealthySocket(addresses);
-    if (socket == null) throw new MailException("can not connected to any mail server");
+    if (socket == null) throw new IOException("can not connected to any mail server");
     InputStream in;
     OutputStream out;
     try {
       in = socket.getInputStream();
       out = socket.getOutputStream();
-    } catch (IOException e) {
-      throw new MailException("error opening socket stream");
+    } catch (java.io.IOException e) {
+      throw new IOException("error opening socket stream");
     }
     realChain.setChannel(new Channel() {
 
@@ -65,40 +64,27 @@ public class ConnectInterceptor implements Interceptor {
         return socket;
       }
 
-      @Override
-      @Nonnull
-      public InputStream inputStream() {
-        return in;
-      }
-
-      @Override
-      @Nonnull
-      public OutputStream outputStream() {
-        return out;
-      }
-
       @Nonnull
       @Override
-      public Sink sink() {
+      public Sink sink() throws IOException {
         if (sink == null) {
-          sink = Sink.wrap(outputStream());
+          sink = Okio.buffer(Okio.sink(socket));
         }
         return sink;
       }
 
       @Nonnull
       @Override
-      public Source source() {
+      public Source source() throws IOException {
         if (source == null) {
-          source = Source.wrap(inputStream());
+          source = Okio.buffer(Okio.source(socket));
         }
         return source;
       }
     });
-    Response response = chain.proceed(mail);
+    chain.proceed(mail);
     //close any socket resource...
     Util.closeQuietly(socket);
-    return response;
   }
 
   @Nullable
@@ -106,7 +92,7 @@ public class ConnectInterceptor implements Interceptor {
     for (int i = 0; i < mailboxHosts.size(); i++) {
       try {
         return socketFactory.createSocket(mailboxHosts.get(i), 25);
-      } catch (IOException ignore) {
+      } catch (java.io.IOException ignore) {
       }
     }
     return null;

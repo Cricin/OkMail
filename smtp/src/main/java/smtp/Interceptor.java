@@ -1,12 +1,14 @@
 package smtp;
 
+import java.io.IOException;
+
 public interface Interceptor {
 
-  Response intercept(Chain chain) throws MailException;
+  void intercept(Chain chain) throws IOException;
 
   interface Chain {
 
-    Response proceed(Mail mail) throws MailException;
+    Response proceed(Mail mail) throws IOException;
 
     Mail mail();
 

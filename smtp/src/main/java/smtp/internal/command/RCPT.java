@@ -1,28 +1,45 @@
 package smtp.internal.command;
 
+import okio.BufferedSink;
+import okio.BufferedSource;
 import smtp.Mail;
-import smtp.MailException;
-import smtp.internal.io.Sink;
-import smtp.internal.io.Source;
+import smtp.Mailbox;
+import smtp.Response;
+import smtp.Server;
+import smtp.internal.Util;
+
+import java.io.IOException;
+import java.util.List;
 
 public class RCPT extends Command {
-  @Override
-  public String name() {
-    return "RCPT";
-  }
+
+  private static final String NAME = "RCPT";
+  private static final String PARAM = "TO:";
 
   @Override
-  protected void doCommand(Sink sink, Source source) throws MailException {
+  protected void doCommand(Chain chain,
+                           BufferedSink sink,
+                           BufferedSource source,
+                           Mail mail,
+                           Server server) throws IOException {
+    final List<Mailbox> recipients = mail.recipients();
+    for (int i = 0; i < recipients.size(); i++) {
+      final Mailbox to = recipients.get(i);
 
+      sink.writeUtf8(NAME)
+              .writeByte(Util.SP)
+              .writeUtf8(PARAM)
+              .writeUtf8(to.canonical())
+              .writeByte(Util.CR)
+              .writeByte(Util.LF)
+              .flush();
+
+      Response r = readResponse(source);
+      final int code = r.code();
+      if (code != 250) {
+        throwErrorCode(code, "send mail command failed");
+      }
+    }
   }
 
-  @Override
-  public boolean shouldRecall() {
-    Mail mail = mail();
-
-
-
-
-    return super.shouldRecall();
-  }
 }

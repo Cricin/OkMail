@@ -1,4 +1,6 @@
 package smtp.internal.codec;
 
-public class SMTP {
+import smtp.Server;
+
+public class SMTP implements Server {
 }

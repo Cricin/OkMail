@@ -3,14 +3,16 @@ package smtp.internal.command;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import smtp.Mail;
+import smtp.Response;
 import smtp.Server;
-import smtp.internal.Util;
 
 import java.io.IOException;
 
-public class QUIT extends Command {
-
-  private static final String NAME = "QUIT";
+/**
+ * used to receive first line response after
+ * socket connected.
+ */
+public class CONNECT extends Command {
 
   @Override
   protected void doCommand(Chain chain,
@@ -18,11 +20,10 @@ public class QUIT extends Command {
                            BufferedSource source,
                            Mail mail,
                            Server server) throws IOException {
-    //do not care response, just send quit command
-    sink.writeUtf8(NAME)
-            .writeByte(Util.CR)
-            .writeByte(Util.LF)
-            .flush();
+    Response next = readResponse(source);
+    final int code = next.code();
+    if (code != 220) {
+      throwErrorCode(code, "server maybe not ready");
+    }
   }
-
 }

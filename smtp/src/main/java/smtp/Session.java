@@ -6,15 +6,7 @@ public interface Session {
 
   Mail mail();
 
-  Response send() throws IOException;
-
-  void cancel();
-
-  void enqueue(Callback callback);
-
-  boolean isSent();
-
-  boolean isCancelled();
+  void send() throws IOException;
 
   Session clone();
 
