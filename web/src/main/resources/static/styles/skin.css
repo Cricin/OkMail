@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#skin-container {
+  width: 340px;
+  height: 170px;
+  /* border: 1px solid red; */
+  box-shadow: 5px 5px 8px #aaa;
+}
+
+#skin-container li {
+  float: left;
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  max-height: 80px;
+  list-style: none;
+  background: url('../images/skin-default.jpeg');
+  background-size: cover;
+  margin-top: 2px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+}
+
+#skin-container li.left {
+  margin-left: 4px;
+}
+
+#skin-container li.right {
+  margin-right: 4px;
+}
+
+#skin-container img {
+  width: 24px;
+  height: 24px;
+  float: right;
+  margin-top: 4px;
+  margin-right: 4px;
+}
+
+

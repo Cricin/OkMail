@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles/skin.css">
+</head>
+
+<body>
+
+<div>
+
+  <div class="button"></div>
+  <div id="skin-container">
+    <ul>
+      <li class="left">
+        <img src="images/select-inactive.png" alt="">
+      </li>
+      <li>
+        <img src="" alt="">
+      </li>
+      <li>
+        <img src="" alt="">
+      </li>
+      <li class="right">
+        <img src="" alt="">
+      </li>
+      <li class="left">
+        <img src="" alt="">
+      </li>
+      <li>
+        <img src="" alt="">
+      </li>
+      <li>
+        <img src="" alt="">
+      </li>
+      <li class="right">
+        <img src="" alt="">
+      </li>
+    </ul>
+
+  </div>
+
+</div>
+<script>
+  var a = document.getElementById('skin-container').getElementsByTagName('li')
+  for (var i = 0; i < a.length; i++) {
+    a[i].onclick = function (event) {
+      clearSelect()
+      if (event.srcElement.firstElementChild != null) {
+        event.srcElement.firstElementChild.src = 'images/select-active.png'
+      }
+    }
+  }
+
+  function clearSelect() {
+    for (var i = 0; i < a.length; i++) {
+      a[i].firstElementChild.src = ''
+    }
+  }
+</script>
+</body>
+
+</html>

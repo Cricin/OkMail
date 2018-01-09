@@ -1,0 +1,80 @@
+.wrap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  background: url("../images/skin-default.jpeg");
+}
+
+.header {
+  height: 80px;
+}
+
+.left-panel {
+  float: left;
+  height: 100%;
+  background: greenyellow;
+}
+
+.menu-group {
+  float: right;
+}
+
+.menu-group a {
+  font-size: 14px;
+  color: #333;
+}
+
+.action-button {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+}
+
+.pop {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+}
+
+.pop img {
+  box-shadow: 1px 4px 4px #333333;
+  padding: 8px;
+  background: #25b7ff;
+  border-radius: 50%;
+}
+
+.popup-overlay {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+}
+
+.popup-overlay .popup-window {
+  padding: 8px;
+  background: #ffffff;
+  min-width: 300px;
+  max-width: 40%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -10%;
+  margin-left: -20%;
+  border-radius: 3px;
+}
+
+.popup-overlay .popup-window span {
+  display: block;
+  color: #333;
+}
+
+.popup-overlay .popup-window button {
+  float: right;
+  font-size: 18px;
+  color: #FF4081;
+  background: none;
+}
+
+.popup-overlay .popup-window #popup-cancel-button {
+  margin-right: 10px;
+}

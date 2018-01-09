@@ -1,10 +1,10 @@
 package demo;
 
-import smtp.Client;
-import smtp.Mail;
-import smtp.Mailbox;
-import smtp.Session;
-import smtp.internal.connection.SystemMxDns;
+import okmail.smtp.Client;
+import okmail.smtp.Mail;
+import okmail.smtp.Mailbox;
+import okmail.smtp.Session;
+import okmail.smtp.internal.connection.SystemMxDns;
 
 import javax.net.SocketFactory;
 import java.io.IOException;

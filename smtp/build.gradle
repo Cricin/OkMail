@@ -13,12 +13,28 @@ dependencies {
 
 sourceSets {
 
-  main{
+  main {
 
   }
 
-  test{
+  test {
 
   }
 
+}
+
+tasks.create('countLine') {
+  doFirst {
+    def lineCount = 0
+    sourceSets.all { sourceSet ->
+      sourceSet.getAllSource().files.each { file ->
+        if (file.path.endsWith('.java')) {
+          file.eachLine {
+            lineCount++
+          }
+        }
+      }
+    }
+    println "total line count ---> $lineCount"
+  }
 }

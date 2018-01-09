@@ -1,0 +1,13 @@
+apply plugin: 'war'
+
+version '0.0.1'
+
+dependencies {
+  compile 'org.springframework:spring-webmvc:5.0.2.RELEASE'
+  compileOnly 'javax.servlet:javax.servlet-api:4.0.0'
+  compile 'org.projectlombok:lombok:1.16.18'
+  compile 'com.alibaba:fastjson:1.2.41'
+  compile project(':smtp')
+  compile project(':eml')
+  compile project(':pop3')
+}

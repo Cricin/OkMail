@@ -1,0 +1,23 @@
+#content {
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+h3 {
+  margin-top: 18px;
+}
+
+#test-button {
+  margin-top: 20px;
+}
+
+#test-button span {
+  vertical-align: 5px;
+  text-align: center;
+}
+
+#test-button img {
+  margin-top: 5px;
+  margin-left: 10px;
+}
