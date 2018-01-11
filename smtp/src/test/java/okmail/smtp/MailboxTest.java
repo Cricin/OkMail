@@ -1,5 +1,6 @@
 package okmail.smtp;
 
+import okmail.mail.Mailbox;
 import org.junit.Assert;
 import org.junit.Test;
 

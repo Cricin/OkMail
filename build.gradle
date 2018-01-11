@@ -5,4 +5,27 @@ allprojects {
     }
     mavenCentral()
   }
+  if(plugins.hasPlugin('java')){
+    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_7
+  }
+}
+
+//统计所有project的java代码行数
+tasks.create('countLine') {
+  doFirst {
+    def lineCount = 0
+    subprojects { child ->
+      child.sourceSets.all { sourceSet ->
+        sourceSet.getAllSource().files.each { file ->
+          if (file.path.endsWith('.java')) {
+            file.eachLine {
+              lineCount++
+            }
+          }
+        }
+      }
+    }
+    println "total line count ---> $lineCount"
+  }
 }

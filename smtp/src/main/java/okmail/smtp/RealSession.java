@@ -1,5 +1,6 @@
 package okmail.smtp;
 
+import okmail.mail.Mail;
 import okmail.smtp.internal.RealInterceptorChain;
 import okmail.smtp.internal.ValidateInterceptor;
 import okmail.smtp.internal.command.Command;

@@ -1,5 +1,6 @@
 package okmail.smtp.internal;
 
+import okmail.mail.Mail;
 import okmail.smtp.*;
 
 import javax.annotation.Nonnull;

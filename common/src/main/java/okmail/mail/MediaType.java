@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package okmail.smtp;
+package okmail.mail;
 
 import javax.annotation.Nullable;
 import java.nio.charset.Charset;

@@ -1,7 +1,8 @@
 package okmail.smtp.internal;
 
+import okmail.mail.Mail;
+import okmail.mail.SmtpDate;
 import okmail.smtp.Interceptor;
-import okmail.smtp.Mail;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;

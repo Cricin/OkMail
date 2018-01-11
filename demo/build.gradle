@@ -1,0 +1,10 @@
+
+apply plugin: 'java'
+
+dependencies{
+  compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
+
+  compile project(':smtp')
+  compile project(':pop3')
+  compile 'com.squareup.okhttp3:okhttp:3.9.0'
+}

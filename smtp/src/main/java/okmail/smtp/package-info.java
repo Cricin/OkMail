@@ -1,5 +1,5 @@
 /**
- * A simply smtp protocol implementation for java
+ * OkMail smtp protocol implementation
  */
 @javax.annotation.ParametersAreNonnullByDefault
 package okmail.smtp;

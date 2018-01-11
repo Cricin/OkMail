@@ -1,6 +1,6 @@
 package okmail.smtp.internal;
 
-import okmail.smtp.internal.connection.SystemMxDns;
+import okmail.dns.SystemMxDns;
 import org.junit.Assert;
 import org.junit.Test;
 

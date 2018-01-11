@@ -1,5 +1,7 @@
 package okmail.smtp;
 
+import okmail.mail.Mail;
+
 import java.io.IOException;
 
 public interface Interceptor {

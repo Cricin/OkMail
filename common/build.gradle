@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+
+dependencies{
+  compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
+  compileOnly 'dnsjava:dnsjava:2.1.7' //this is optional
+
+  testCompile 'junit:junit:4.12'
+
+  compile 'com.squareup.okio:okio:1.13.0'
+}

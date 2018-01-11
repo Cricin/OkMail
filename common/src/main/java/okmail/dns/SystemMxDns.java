@@ -1,6 +1,4 @@
-package okmail.smtp.internal.connection;
-
-import okmail.smtp.MxDns;
+package okmail.dns;
 
 import javax.annotation.Nonnull;
 import javax.naming.NamingException;

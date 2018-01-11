@@ -1,6 +1,4 @@
-package okmail.smtp;
-
-import okmail.smtp.internal.connection.SystemMxDns;
+package okmail.dns;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

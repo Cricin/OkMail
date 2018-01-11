@@ -1,4 +1,4 @@
-package okmail.smtp.internal;
+package okmail;
 
 import java.io.Closeable;
 import java.nio.charset.Charset;

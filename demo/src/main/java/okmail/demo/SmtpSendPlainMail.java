@@ -1,15 +1,15 @@
-package demo;
+package okmail.demo;
 
+import okmail.dns.SystemMxDns;
+import okmail.mail.Mail;
+import okmail.mail.Mailbox;
 import okmail.smtp.Client;
-import okmail.smtp.Mail;
-import okmail.smtp.Mailbox;
 import okmail.smtp.Session;
-import okmail.smtp.internal.connection.SystemMxDns;
 
 import javax.net.SocketFactory;
 import java.io.IOException;
 
-public class Main {
+public class SmtpSendPlainMail {
 
   public static void main(String[] args) {
     Client client = new Client

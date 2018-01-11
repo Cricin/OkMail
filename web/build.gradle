@@ -8,6 +8,5 @@ dependencies {
   compile 'org.projectlombok:lombok:1.16.18'
   compile 'com.alibaba:fastjson:1.2.41'
   compile project(':smtp')
-  compile project(':eml')
   compile project(':pop3')
 }

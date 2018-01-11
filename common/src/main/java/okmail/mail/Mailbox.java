@@ -1,6 +1,6 @@
-package okmail.smtp;
+package okmail.mail;
 
-import okmail.smtp.internal.Util;
+import okmail.Util;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
@@ -63,6 +63,7 @@ public final class Mailbox {
   }
 
   /**
+   * static factory method to create {@link Mailbox} mailbox.
    * @param string the mailbox in text form, simply like <p>alice@host.com</p>
    * @return parsed Mailbox or null if the specified string format is illegal
    */

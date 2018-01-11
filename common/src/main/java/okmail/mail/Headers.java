@@ -15,9 +15,8 @@
  *  limitations under the License.
  */
 
-package okmail.smtp;
+package okmail.mail;
 
-import okmail.smtp.internal.SmtpDate;
 
 import javax.annotation.Nullable;
 import java.util.*;

@@ -1,6 +1,5 @@
-package okmail.smtp.internal.connection;
+package okmail.dns;
 
-import okmail.smtp.MxDns;
 import org.xbill.DNS.*;
 
 import javax.annotation.Nonnull;

@@ -2,7 +2,7 @@ package okmail.smtp.internal.command;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
-import okmail.smtp.Mail;
+import okmail.mail.Mail;
 import okmail.smtp.Response;
 import okmail.smtp.Server;
 

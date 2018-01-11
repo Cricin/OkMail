@@ -1,7 +1,9 @@
 package okmail.smtp;
 
-import okmail.smtp.internal.connection.DnsJavaMxDns;
-import okmail.smtp.internal.connection.SystemMxDns;
+import okmail.dns.DnsJavaMxDns;
+import okmail.dns.MxDns;
+import okmail.dns.SystemMxDns;
+import okmail.mail.Mail;
 import okmail.smtp.internal.hook.HookerComposite;
 
 import javax.net.SocketFactory;

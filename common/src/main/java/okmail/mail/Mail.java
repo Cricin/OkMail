@@ -1,4 +1,4 @@
-package okmail.smtp;
+package okmail.mail;
 
 import java.util.ArrayList;
 import java.util.Collections;

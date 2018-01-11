@@ -2,39 +2,10 @@ apply plugin: 'java'
 
 version '0.0.1'
 
-sourceCompatibility = 1.8
-
 dependencies {
   testCompile 'junit:junit:4.12'
-  compileOnly 'dnsjava:dnsjava:2.1.7'
+
   compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
-  compile 'com.squareup.okhttp3:okhttp:3.9.0'
+  compile project(':common')
 }
 
-sourceSets {
-
-  main {
-
-  }
-
-  test {
-
-  }
-
-}
-
-tasks.create('countLine') {
-  doFirst {
-    def lineCount = 0
-    sourceSets.all { sourceSet ->
-      sourceSet.getAllSource().files.each { file ->
-        if (file.path.endsWith('.java')) {
-          file.eachLine {
-            lineCount++
-          }
-        }
-      }
-    }
-    println "total line count ---> $lineCount"
-  }
-}

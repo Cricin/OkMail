@@ -3,9 +3,13 @@ package okmail.smtp.internal.connection;
 import okio.Okio;
 import okio.Sink;
 import okio.Source;
-import okmail.smtp.*;
+import okmail.Util;
+import okmail.dns.MxDns;
+import okmail.mail.Mail;
+import okmail.mail.Mailbox;
+import okmail.smtp.Channel;
+import okmail.smtp.Interceptor;
 import okmail.smtp.internal.RealInterceptorChain;
-import okmail.smtp.internal.Util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

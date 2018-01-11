@@ -2,11 +2,11 @@ package okmail.smtp.internal.command;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
-import okmail.smtp.Mail;
-import okmail.smtp.Mailbox;
+import okmail.Util;
+import okmail.mail.Mail;
+import okmail.mail.Mailbox;
 import okmail.smtp.Response;
 import okmail.smtp.Server;
-import okmail.smtp.internal.Util;
 
 import java.io.IOException;
 import java.util.List;
