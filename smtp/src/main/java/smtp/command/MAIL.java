@@ -2,10 +2,10 @@ package smtp.command;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
-import smtp.Response;
-import smtp.Server;
+import smtp.misc.Response;
+import smtp.ServerOptions;
 import smtp.mail.Mail;
-import smtp.util.Utils;
+import smtp.misc.Utils;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class MAIL extends Command {
                            BufferedSink sink,
                            BufferedSource source,
                            Mail mail,
-                           Server server) throws IOException {
+                           ServerOptions serverOptions) throws IOException {
     sink.writeUtf8(NAME)
         .writeByte(Utils.SP)
             .writeUtf8(PARAM)

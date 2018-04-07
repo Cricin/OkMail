@@ -1,4 +1,4 @@
-package smtp.net;
+package smtp.misc;
 
 import org.xbill.DNS.*;
 import smtp.Dns;

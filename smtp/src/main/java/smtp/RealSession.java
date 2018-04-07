@@ -60,6 +60,8 @@ final class RealSession implements Session {
     List<Interceptor> interceptors = new LinkedList<>();
     interceptors.add(new ValidateInterceptor(client.mailIdGenerator()));
     interceptors.add(new ConnectInterceptor(serverAddress));
+    interceptors.add(new ConfirmInterceptor());
+    interceptors.add(new StartTlsInterceptor());
     interceptors.add(new AuthInterceptor(auth));
     interceptors.add(new ProtocolInterceptor(Command.newCommandsForSession(this)));
     Interceptor.Chain chain = new RealInterceptorChain(this, interceptors);

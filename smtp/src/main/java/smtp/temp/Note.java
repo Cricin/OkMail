@@ -3,6 +3,18 @@ package smtp.temp;
 public class Note {
 
   /*
+   *
+   * RFC821 SMTP
+   * RFC1426 8bit mime
+   * RFC2034 ENHANCED SMTP STATUS CODE
+   * RFC2290  Pipelining
+   * RFC2822 消息结构
+   * RFC3207 starttls
+   *
+   *
+   */
+
+  /*
       smtp 使用端口25
    */
 

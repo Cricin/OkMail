@@ -2,9 +2,9 @@ package smtp.command;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
-import smtp.Server;
+import smtp.ServerOptions;
 import smtp.mail.Mail;
-import smtp.util.Utils;
+import smtp.misc.Utils;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class QUIT extends Command {
                            BufferedSink sink,
                            BufferedSource source,
                            Mail mail,
-                           Server server) throws IOException {
+                           ServerOptions serverOptions) throws IOException {
     //do not care response, just send quit command
     sink.writeUtf8(NAME)
         .writeByte(Utils.CR)

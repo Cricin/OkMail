@@ -2,7 +2,7 @@ package smtp.internal;
 
 import org.junit.Assert;
 import org.junit.Test;
-import smtp.net.SystemDns;
+import smtp.misc.SystemDns;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,7 +24,7 @@ public class SystemMxDnsTest {
   @Test
   public void testLookupForQQ() throws UnknownHostException {
     List<InetAddress> list = dns.lookupByMxRecord("qq.com");
-    InetAddress actual = InetAddress.getByName("mx1.qq.com");//mx1.qq.com is a mx recorded server for qq
+    InetAddress actual = InetAddress.getByName("mx1.qq.com");//mx1.qq.com is a mx recorded serverOptions for qq
     boolean match = false;
     for (InetAddress expected : list) {
       match |= expected != null && expected.equals(actual);

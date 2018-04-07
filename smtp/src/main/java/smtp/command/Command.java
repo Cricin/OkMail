@@ -3,8 +3,8 @@ package smtp.command;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import smtp.Interceptor;
-import smtp.Response;
-import smtp.Server;
+import smtp.misc.Response;
+import smtp.ServerOptions;
 import smtp.Session;
 import smtp.interceptor.RealInterceptorChain;
 import smtp.mail.Mail;
@@ -22,8 +22,8 @@ public abstract class Command implements Interceptor {
     RealInterceptorChain realChain = (RealInterceptorChain) chain;
     final BufferedSink sink = (BufferedSink) realChain.channel().sink();
     final BufferedSource source = (BufferedSource) realChain.channel().source();
-    Server server = realChain.server();
-    doCommand(chain, sink, source, mail, server);
+    ServerOptions serverOptions = realChain.serverOptions();
+    doCommand(chain, sink, source, mail, serverOptions);
     chain.proceed(mail);
   }
 
@@ -31,7 +31,7 @@ public abstract class Command implements Interceptor {
                                     BufferedSink sink,
                                     BufferedSource source,
                                     Mail mail,
-                                    Server server) throws IOException;
+                                    ServerOptions serverOptions) throws IOException;
 
   protected void throwErrorCode(int code, String msg) throws IOException {
     throw new IOException("Code Not Valid: " + code + "{ " + msg + " }");

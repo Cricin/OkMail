@@ -19,7 +19,16 @@ package smtp.mail;
 
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * The header fields of a single HTTP message. Values are uninterpreted strings; use {@code Request}
@@ -46,21 +55,6 @@ public final class Headers {
 
   private Headers(String[] namesAndValues) {
     this.namesAndValues = namesAndValues;
-  }
-
-  public @Nullable
-  Mailbox getFrom() {
-    String from = get("From");
-    if (from == null) return null;
-    return Mailbox.parse(from.substring(from.lastIndexOf('<') + 1, from.lastIndexOf('>')));
-  }
-
-  public @Nullable
-  List<Mailbox> getRecipients() {
-    String to = get("To");
-    if (to == null) return null;
-    return Collections.singletonList(Mailbox.parse(to.substring(to.lastIndexOf('<') + 1, to
-        .lastIndexOf('>'))));
   }
 
   /**

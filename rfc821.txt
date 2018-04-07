@@ -231,7 +231,7 @@ RFC 821                                                      August 1982
    more relay SMTP-servers when the source and destination hosts are not
    connected to the same transport service.
 
-   To be able to provide the relay capability the SMTP-server must be
+   To be able to provide the relay capability the SMTP-serverOptions must be
    supplied with the name of the ultimate destination host as well as
    the destination mailbox name.
 
@@ -875,14 +875,14 @@ Simple Mail Transfer Protocol
       be confused.
 
       Conceptually the elements of the forward-path are moved to the
-      reverse-path as the message is relayed from one server-SMTP to
+      reverse-path as the message is relayed from one serverOptions-SMTP to
       another.  The reverse-path is a reverse source route, (i.e., a
       source route from the current location of the message to the
-      originator of the message).  When a server-SMTP deletes its
+      originator of the message).  When a serverOptions-SMTP deletes its
       identifier from the forward-path and inserts it into the
       reverse-path, it must use the name it is known by in the
       environment it is sending into, not the environment the mail came
-      from, in case the server-SMTP is known by different names in
+      from, in case the serverOptions-SMTP is known by different names in
       different environments.
 
       If when the message arrives at an SMTP the first element of the
@@ -892,7 +892,7 @@ Simple Mail Transfer Protocol
       identifier to the reverse-path.
 
       Using source routing the receiver-SMTP receives mail to be relayed
-      to another server-SMTP  The receiver-SMTP may accept or reject the
+      to another serverOptions-SMTP  The receiver-SMTP may accept or reject the
       task of relaying the mail in the same way it accepts or rejects
       mail for a local user.  The receiver-SMTP transforms the command
       arguments by moving its own identifier from the forward-path to
@@ -910,7 +910,7 @@ Simple Mail Transfer Protocol
       appear in the "To:" , "From:", "CC:", etc. fields of the message
       header.
 
-      If a server-SMTP has accepted the task of relaying the mail and
+      If a serverOptions-SMTP has accepted the task of relaying the mail and
 
 
 
@@ -929,8 +929,8 @@ RFC 821                                                      August 1982
       originator of the undeliverable mail (as indicated by the
       reverse-path).
 
-      This notification message must be from the server-SMTP at this
-      host.  Of course, server-SMTPs should not send notification
+      This notification message must be from the serverOptions-SMTP at this
+      host.  Of course, serverOptions-SMTPs should not send notification
       messages about problems with notification messages.  One way to
       prevent loops in error reporting is to specify a null reverse-path
       in the MAIL command of a notification message.  When such a
@@ -2213,7 +2213,7 @@ RFC 821                                                      August 1982
       before sending any commands.
 
          Note: all the greeting type replies have the official name of
-         the server host as the first word following the reply code.
+         the serverOptions host as the first word following the reply code.
 
             For example,
 

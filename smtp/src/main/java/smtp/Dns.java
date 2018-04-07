@@ -1,6 +1,6 @@
 package smtp;
 
-import smtp.net.SystemDns;
+import smtp.misc.SystemDns;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A domain name service that resolves IP addresses for host names.
  * Most applications will use the {@link SystemDns DNS service}.
- * Some applications may provide their own implementation to use a different DNS server,
+ * Some applications may provide their own implementation to use a different DNS serverOptions,
  * to prefer IPv6 addresses,to prefer IPv4 addresses, or to force a specific known IP
  * address.
  * <p>

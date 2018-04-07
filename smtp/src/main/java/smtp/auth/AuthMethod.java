@@ -1,37 +1,31 @@
 package smtp.auth;
 
+import smtp.Channel;
 import smtp.Session;
 
+import java.io.IOException;
+
 /**
- * AuthMethod represent a server authentication procedure when
- * server requires user auth before any mail being sent.
+ * AuthMethod represent a serverOptions authentication procedure when
+ * serverOptions requires user auth before any mail being sent.
  */
 public interface AuthMethod {
 
   /**
-   * @param session a session that sending an mail.
    * @return true if auth succeed
    */
-  boolean auth(Session session);
+  boolean auth(Authentication auth, Channel channel) throws IOException;
 
   AuthMethod AUTH = new AuthMethod() {
     @Override
-    public boolean auth(Session session) {
+    public boolean auth(Authentication auth, Channel channel) throws IOException {
       return false;
     }
   };
 
   AuthMethod PLAIN = new AuthMethod() {
     @Override
-    public boolean auth(Session session) {
-      return false;
-    }
-  };
-
-
-  AuthMethod CRAM_MD5 = new AuthMethod() {
-    @Override
-    public boolean auth(Session session) {
+    public boolean auth(Authentication auth, Channel channel) throws IOException {
       return false;
     }
   };

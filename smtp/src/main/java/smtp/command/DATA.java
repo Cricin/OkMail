@@ -2,11 +2,11 @@ package smtp.command;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
-import smtp.Response;
-import smtp.Server;
+import smtp.misc.Response;
+import smtp.ServerOptions;
 import smtp.mail.Headers;
 import smtp.mail.Mail;
-import smtp.util.Utils;
+import smtp.misc.Utils;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,7 @@ public class DATA extends Command {
                            BufferedSink sink,
                            BufferedSource source,
                            Mail mail,
-                           Server server) throws IOException {
+                           ServerOptions serverOptions) throws IOException {
     sink.writeUtf8(NAME)
         .writeByte(Utils.CR)
         .writeByte(Utils.LF)
@@ -54,7 +54,7 @@ public class DATA extends Command {
 
   private String escapeMailContent(Mail mail) {
     //todo escape string
-    return mail.content();
+    return null;
   }
 
   private String buildHeaders(Mail mail) {

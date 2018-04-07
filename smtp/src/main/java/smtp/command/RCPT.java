@@ -2,11 +2,11 @@ package smtp.command;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
-import smtp.Response;
-import smtp.Server;
+import smtp.misc.Response;
+import smtp.ServerOptions;
 import smtp.mail.Mail;
 import smtp.mail.Mailbox;
-import smtp.util.Utils;
+import smtp.misc.Utils;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +21,7 @@ public class RCPT extends Command {
                            BufferedSink sink,
                            BufferedSource source,
                            Mail mail,
-                           Server server) throws IOException {
+                           ServerOptions serverOptions) throws IOException {
     final List<Mailbox> recipients = mail.recipients();
     for (int i = 0; i < recipients.size(); i++) {
       final Mailbox to = recipients.get(i);

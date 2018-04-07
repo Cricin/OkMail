@@ -22,8 +22,8 @@ public class ValidateInterceptor implements Interceptor {
     Mail mail = chain.mail();
     assertNotNull(mail.from(), "from == null");
     assertNotNull(mail.headers().get("Subject"), "subject == null");
-    assertNotNull(mail.content(), "content == null");
     Mail.Builder builder = mail.newBuilder();
+
     if (mail.headers().get("X-Mailer") == null) {
       builder.addHeader("X-Mailer", Version.VERSION_TEXT);
     }
@@ -32,6 +32,12 @@ public class ValidateInterceptor implements Interceptor {
     }
     if (mail.headers().get("Date") == null) {
       builder.addHeader("Date", SmtpDate.format(new Date()));
+    }
+    if (mail.headers().get("MIME-Version") == null) {
+      builder.addHeader("MIME-Version", "1.0");
+    }
+    if (mail.headers().get("Content-Type") == null && mail.body() != null) {
+      builder.addHeader("Content-Type", mail.body().contentType().toString());
     }
 
 

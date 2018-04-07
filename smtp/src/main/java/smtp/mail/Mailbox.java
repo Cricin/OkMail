@@ -1,23 +1,17 @@
 package smtp.mail;
 
 
-import smtp.util.Utils;
-
 import javax.annotation.Nonnull;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 public final class Mailbox {
 
-  //邮箱正则
-  private static final Pattern MAILBOX_PATTERN = Pattern.compile("^([a-zA-Z0-9_-]+)@([a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+)$");
-
+  private String displayName;
   private String mailbox;
-  private String name; //max: 64byte
-  private String host; //max: 64byte
+  private String name;
+  private String host;
 
-  Mailbox(String mailbox, String name, String host) {
+  Mailbox(String mailbox, @Nullable String displayName, String name, String host) {
     this.mailbox = mailbox;
     this.name = name;
     this.host = host;
@@ -65,20 +59,25 @@ public final class Mailbox {
 
   /**
    * static factory method to create {@link Mailbox} mailbox.
-   * @param string the mailbox in text form, simply like <p>alice@host.com</p>
+   *
+   * @param string the mailbox in text form, simply like alice&lt alice@host.com&gt
    * @return parsed Mailbox or null if the specified string format is illegal
    */
   @Nonnull
   public static Mailbox parse(String string) {
-    Matcher matcher = MAILBOX_PATTERN.matcher(string);
-    if (!matcher.lookingAt()) throw new IllegalArgumentException("invalid mailbox");
-    String name = matcher.group(1).toLowerCase(Locale.US);
-    if (name.getBytes(Utils.ASCII).length > 64)
-      throw new IllegalArgumentException("mailbox name too long");
-    String host = matcher.group(2).toLowerCase(Locale.US);
-    if (host.getBytes(Utils.ASCII).length > 64)
-      throw new IllegalArgumentException("mailbox host too long");
-    return new Mailbox(string, name, host);
+    String displayName = null;
+    String name;
+    String host;
+    String trimmed = string.trim();
+    if (trimmed.charAt(0) != '<') {
+      displayName = trimmed.substring(trimmed.indexOf('<'));
+      name = trimmed.substring(trimmed.indexOf('<') + 1, trimmed.indexOf('@'));
+      host = trimmed.substring(trimmed.indexOf('@') + 1, trimmed.indexOf('>'));
+    } else {
+      name = trimmed.substring(0, trimmed.indexOf('@'));
+      host = trimmed.substring(trimmed.indexOf('@') + 1);
+    }
+    return new Mailbox(string, displayName, name, host);
   }
 
 }

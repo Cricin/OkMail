@@ -1,4 +1,4 @@
-package smtp;
+package smtp.misc;
 
 import javax.annotation.Nullable;
 

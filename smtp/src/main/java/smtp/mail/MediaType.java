@@ -24,14 +24,9 @@ import java.util.regex.Pattern;
 /**
  * An <a href="http://tools.ietf.org/html/rfc2045">RFC 2045</a> Media Type, appropriate to describe
  * the content type of an HTTP request or response body.
- *
- * taken from OkHttp-3.9.0
  */
 public final class MediaType {
 
-  public static final MediaType IMAGE_PNG = MediaType.parse("image/png");
-  public static final MediaType IMAGE_JPEG = MediaType.parse("image/jpeg");
-  public static final MediaType TEXT_UTF8 = MediaType.parse("text/plain; charset=utf-8");
 
 
   private static final String TOKEN = "([a-zA-Z0-9-!#$%&'*+.^_`{|}~]+)";

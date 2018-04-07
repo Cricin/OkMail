@@ -21,9 +21,11 @@ public interface Interceptor {
 
     Mail mail();
 
+    SmtpClient client();
+
     Channel channel();
 
-    SmtpClient client();
+    ServerOptions serverOptions();
   }
 
 }

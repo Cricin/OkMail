@@ -12,13 +12,13 @@ public final class Mail {
   private final List<Mailbox> cc;
   private final List<Mailbox> bcc;
   private final Headers headers;
-  private final String content;
+  private final MailBody mailBody;
   private final Object tag;
 
   private Mail(Builder builder) {
     from = builder.from;
     headers = builder.headers.build();
-    content = builder.content;
+    mailBody = builder.mailBody;
     tag = builder.tag;
     recipients = Collections.unmodifiableList(new ArrayList<>(builder.recipients));
     cc = Collections.unmodifiableList(new ArrayList<>(builder.cc));
@@ -45,8 +45,8 @@ public final class Mail {
     return headers;
   }
 
-  public String content() {
-    return content;
+  public MailBody body() {
+    return mailBody;
   }
 
   public Object tag() {
@@ -59,7 +59,7 @@ public final class Mail {
     out.recipients.addAll(recipients);
     out.cc.addAll(cc);
     out.bcc.addAll(bcc);
-    out.content = content;
+    out.mailBody = mailBody;
     out.headers = headers.newBuilder();
     out.tag = this.tag;
     return out;
@@ -74,7 +74,7 @@ public final class Mail {
     private HashSet<Mailbox> cc = new HashSet<>();
     private HashSet<Mailbox> bcc = new HashSet<>();
     private Headers.Builder headers = new Headers.Builder();
-    private String content;
+    private MailBody mailBody;
     private Object tag;
 
     public Builder() {
@@ -139,8 +139,8 @@ public final class Mail {
       return this;
     }
 
-    public Builder content(String content) {
-      this.content = content;
+    public Builder body(MailBody mailBody) {
+      this.mailBody = mailBody;
       return this;
     }
 

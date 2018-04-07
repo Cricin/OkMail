@@ -6,7 +6,7 @@ import smtp.Dns;
 import smtp.Interceptor;
 import smtp.mail.Mail;
 import smtp.mail.Mailbox;
-import smtp.util.Utils;
+import smtp.misc.Utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,11 +39,13 @@ public class ConnectInterceptor implements Interceptor {
     final Dns dns = chain.client().dns();
     final Mail mail = chain.mail();
 
+    Utils.d("connecting serverOptions");
+
     Channel channel = null;
 
-    if (serverAddress != null) {//if user specifies an exactly server address
+    if (serverAddress != null) {//if user specifies an exactly serverOptions address
       channel = connector.connect(chain.client(), serverAddress);
-    } else { //dns lookup for server address according to From: header
+    } else { //dns lookup for serverOptions address according to From: header
       final Mailbox from = mail.from();
       List<InetAddress> addresses;
       try {
@@ -62,10 +64,11 @@ public class ConnectInterceptor implements Interceptor {
     }
 
     if (channel == null) {
-      throw new IOException("connecting to server failed");
+      throw new IOException("connecting to serverOptions failed");
     }
 
     ((RealInterceptorChain) chain).setChannel(channel);
+    Utils.d("serverOptions connection established");
     try {
       chain.proceed(mail);
     } finally {

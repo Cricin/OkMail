@@ -4,8 +4,8 @@ import smtp.Channel.ChannelConnector;
 import smtp.auth.Authentication;
 import smtp.mail.Mail;
 import smtp.mime.Encoding;
-import smtp.net.SystemDns;
-import smtp.util.Utils;
+import smtp.misc.SystemDns;
+import smtp.misc.Utils;
 
 import javax.annotation.Nullable;
 import javax.net.SocketFactory;
@@ -29,8 +29,9 @@ public final class SmtpClient implements Session.SessionFactory {
   private final ExecutorService executorService;
   private final ChannelConnector channelConnector;
   private final MailIdGenerator mailIdGenerator;
-  private Encoding transferEncoding;
+  private final Encoding transferEncoding;
   private final int defaultPort;
+  private final boolean useStartTls;
 
 
   /**
@@ -51,6 +52,7 @@ public final class SmtpClient implements Session.SessionFactory {
     channelConnector = builder.channelConnector;
     mailIdGenerator = builder.mailIdGenerator;
     transferEncoding = builder.transferEncoding;
+    useStartTls = builder.useStartTls;
   }
 
   public int defaultPort() {
@@ -94,6 +96,10 @@ public final class SmtpClient implements Session.SessionFactory {
     return transferEncoding;
   }
 
+  public boolean useStartUls(){
+    return useStartTls;
+  }
+
 
   @Override
 
@@ -113,13 +119,14 @@ public final class SmtpClient implements Session.SessionFactory {
     out.channelConnector = channelConnector;
     out.mailIdGenerator = mailIdGenerator;
     out.transferEncoding = transferEncoding;
+    out.useStartTls = useStartTls;
     return out;
   }
 
   /**********************builder*************************/
 
   public static class Builder {
-    private int defaultPort = 25;
+    int defaultPort = 25;
     long connectTimeout = 0L;
     long readTimeout = 0L;
     long writeTimeout = 0L;
@@ -128,6 +135,7 @@ public final class SmtpClient implements Session.SessionFactory {
     SocketFactory socketFactory = SocketFactory.getDefault();
     MailIdGenerator mailIdGenerator = MailIdGenerator.DEFAULT;
     Encoding transferEncoding;
+    boolean useStartTls = true;
     ExecutorService executorService = new ThreadPoolExecutor(
         0,
         Integer.MAX_VALUE,
@@ -187,6 +195,11 @@ public final class SmtpClient implements Session.SessionFactory {
 
     public Builder defaultTransferCodec(Encoding encoding) {
       this.transferEncoding = encoding;
+      return this;
+    }
+
+    public Builder useStartTls(boolean useStartTls){
+      this.useStartTls = useStartTls;
       return this;
     }
 
