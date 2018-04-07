@@ -1,13 +1,13 @@
-allprojects {
+allprojects { p->
   repositories {
     maven {
       url 'http://maven.aliyun.com/nexus/content/groups/public/'
     }
     mavenCentral()
   }
-  if(plugins.hasPlugin('java')){
-    targetCompatibility = JavaVersion.VERSION_1_7
-    sourceCompatibility = JavaVersion.VERSION_1_7
+  if(p.plugins.hasPlugin('java')){
+    p.targetCompatibility = JavaVersion.VERSION_1_7
+    p.sourceCompatibility = JavaVersion.VERSION_1_7
   }
 }
 

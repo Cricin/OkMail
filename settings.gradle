@@ -1,7 +1,7 @@
 
-include 'common'
+//include 'common'
 include 'smtp'
-include 'pop3'
 
-include 'web'
 include 'demo'
+//include 'pop3'
+//include 'web'

@@ -1,0 +1,68 @@
+Return-Path: <1315391989@qq.com>
+Delivered-To: cricin@cricin.cn
+Received: from smtpbguseast2.qq.com ([54.204.34.130])
+          by cricin.cn (JAMES SMTP Server 2.3.2.1) with SMTP ID 338
+          for <cricin@cricin.cn>;
+          Mon, 15 Jan 2018 21:35:08 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1516023300; bh=o63+4qbBB3Yl/ahWzWlJIEXzqa1mC1GOIDyh4dizdUk=;
+	h=From:To:Subject:Mime-Version:Content-Type:Content-Transfer-Encoding:Date:Message-ID;
+	b=nbe5myImhIbYCLeaxUV605GWhPkija57/9H3k1hJoMdTtoRwL0aqO2NpK2TKqT/sV
+	 gTq2YzWyufKHcFxC3KKY/1pMbFnJb4wVuvJj/e6iYQ4bvDzQztXMWqtqbme9FA4VaA
+	 MDgUAauHGVM9/X8DHiE94x4JA4sLhsJDVr8H2WpE=
+X-QQ-FEAT: tMyt+NWEO8j8jIQ7ZnaMwULnbLZiN0w/nc++hP+R+7pyRfrNqPDr9qwBqKOeW
+	eVzZvr53k9gyuxY/0C4Re4Uzt412hrouNRvGTh/GGjMA0SOT51sAj8iwxUhRSzP1vKI7yd4
+	Hvu1oZPmPlbkIEJt1AllbXPQzhsGYz07KRlcJhuh/uIla2Uix3xnRnvQq8NBsDAiPLdEk5w
+	ehykEJYQj/vJXi4p8ao9J4IpZI6FKbsjrPgmwaEqagNGaafzCK4uMwkeDsorXtyE=
+X-QQ-SSF: 000000000000002000000000000000Z
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 112.10.127.95
+X-QQ-STYLE:
+X-QQ-mid: webmail364t1516023299t9323456
+From: "=?gb18030?B?aGVwcGVu?=" <1315391989@qq.com>
+To: "=?gb18030?B?Y3JpY2lu?=" <cricin@cricin.cn>
+Subject: sfdfsdfdsfsdf
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_5A5CAE03_0A8A38E8_71F08C68"
+Content-Transfer-Encoding: 8Bit
+Date: Mon, 15 Jan 2018 21:34:59 +0800
+X-Priority: 3
+Message-ID: <tencent_87700711C6E288244DBD8AD8F51F47C01406@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [10.120.118.201])
+	by smtp.qq.com (ESMTP) with SMTP
+	id ; Mon, 15 Jan 2018 21:34:59 +0800 (CST)
+Feedback-ID: webmail:qq.com:bgforeign:bgforeign1
+X-QQ-Bgrelay: 1
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_5A5CAE03_0A8A38E8_71F08C68
+Content-Type: text/plain;
+	charset="gb18030"
+Content-Transfer-Encoding: base64
+
+Z2ZnZmdkZmdmZGdkZmdkZmdkc2Rmc2Rmcw0KDQoNCi0tLS0tLS0tLS0tLS0tLS0tLQ0KRnJv
+bSBoZXBwZW4=
+
+------=_NextPart_5A5CAE03_0A8A38E8_71F08C68
+Content-Type: text/html;
+	charset="gb18030"
+Content-Transfer-Encoding: base64
+
+PGRpdj48Zm9udCBmYWNlPSLLzszlIj5nZmdmZ2RmZ2ZkZ2RmZ2RmZ2RzZGZzZGZzPC9mb250
+PjwvZGl2PjxkaXY+PGZvbnQgZmFjZT0iy87M5SI+PGJyPjwvZm9udD48L2Rpdj48ZGl2Pjxk
+aXYgc3R5bGU9ImNvbG9yOiM5MDkwOTA7Zm9udC1mYW1pbHk6QXJpYWwgTmFycm93O2ZvbnQt
+c2l6ZToxMnB4Ij4tLS0tLS0tLS0tLS0tLS0tLS08L2Rpdj48ZGl2IHN0eWxlPSJmb250LXNp
+emU6MTRweDtmb250LWZhbWlseTpWZXJkYW5hO2NvbG9yOiMwMDA7Ij48ZGl2PkZyb20gaGVw
+cGVuPC9kaXY+PC9kaXY+PC9kaXY+PGRpdj4mbmJzcDs8L2Rpdj4=
+
+------=_NextPart_5A5CAE03_0A8A38E8_71F08C68--
+
+
+

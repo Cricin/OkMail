@@ -24,4 +24,17 @@ public class AuthController {
   public Object auth(HttpServletRequest req, HttpServletResponse res) {
     return null;
   }
+
+  @ResponseBody
+  @RequestMapping("/json")
+  public User user(){
+    return new User();
+  }
+
+
+  private static final class User {
+    public String name = "ths";
+    public int age = 22;
+    public int sex = 1;
+  }
 }

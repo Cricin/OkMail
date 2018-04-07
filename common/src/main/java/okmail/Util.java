@@ -1,5 +1,6 @@
 package okmail;
 
+import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.nio.charset.Charset;
 
@@ -18,16 +19,8 @@ public final class Util {
   public static final Charset ASCII = Charset.forName("ASCII");
 
 
-  public static boolean equals(Object a, Object b) {
-    if (a == null) return b == null;
-    return a.equals(b);
-  }
 
-  public static int hashCode(Object o) {
-    return o == null ? 0 : o.hashCode();
-  }
-
-  public static void closeQuietly(Closeable c) {
+  public static void closeQuietly(@Nullable Closeable c) {
     if (c == null) return;
     try {
       c.close();
