@@ -23,7 +23,7 @@ public class ConfirmInterceptor implements Interceptor {
     final String serverMsg = source.readUtf8Line();
     Utils.d("serverOptions msg: " + serverMsg);
     sink.writeUtf8("EHLO")
-        .writeUtf8(Version.VERSION_TEXT)
+        .writeUtf8(Version.version())
         .write(Utils.CRLF)
         .flush();
 

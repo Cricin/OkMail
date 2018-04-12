@@ -20,4 +20,14 @@ public class MultipartBody extends MailBody {
   public void writeTo(BufferedSink sink) throws IOException {
 
   }
+
+
+  public static final class Builder{
+
+
+
+  }
+
+
+
 }

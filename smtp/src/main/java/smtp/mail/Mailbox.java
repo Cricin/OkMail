@@ -32,6 +32,11 @@ public final class Mailbox {
     return mailbox;
   }
 
+  @Nonnull
+  public String displayName() {
+    return displayName;
+  }
+
   @Override
   public String toString() {
     return mailbox;
@@ -42,8 +47,8 @@ public final class Mailbox {
     return mailbox.hashCode();
   }
 
-  public String canonical() {
-    return "<" + mailbox + ">";
+  public String canonicalAddress() {
+    return "<" + name+ "@"+ host + ">";
   }
 
   @Override

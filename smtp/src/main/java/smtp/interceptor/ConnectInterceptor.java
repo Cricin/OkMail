@@ -39,7 +39,7 @@ public class ConnectInterceptor implements Interceptor {
     final Dns dns = chain.client().dns();
     final Mail mail = chain.mail();
 
-    Utils.d("connecting serverOptions");
+    Utils.d("connecting to server...");
 
     Channel channel = null;
 
@@ -64,11 +64,11 @@ public class ConnectInterceptor implements Interceptor {
     }
 
     if (channel == null) {
-      throw new IOException("connecting to serverOptions failed");
+      throw new IOException("error connecting to server");
     }
 
     ((RealInterceptorChain) chain).setChannel(channel);
-    Utils.d("serverOptions connection established");
+    Utils.d("server connection established!");
     try {
       chain.proceed(mail);
     } finally {

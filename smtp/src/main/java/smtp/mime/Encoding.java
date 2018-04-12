@@ -6,6 +6,8 @@ public enum Encoding {
 
   BASE64,
 
+  EIGHT_BIT,
+
   AUTO_SELECT
 
 }

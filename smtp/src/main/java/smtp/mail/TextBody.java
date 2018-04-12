@@ -1,10 +1,15 @@
 package smtp.mail;
 
 import okio.BufferedSink;
+import smtp.SmtpClient;
+import smtp.mime.Encoding;
 import smtp.misc.Utils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+
+import static smtp.mime.Encoding.BASE64;
+import static smtp.mime.Encoding.QUOTED_PRINTABLE;
 
 public class TextBody extends MailBody {
 
@@ -29,19 +34,39 @@ public class TextBody extends MailBody {
   @Override
   public void writeTo(BufferedSink sink) throws IOException {
     Charset encodeCharset = null;
-    if(mediaType != null) encodeCharset = mediaType.charset();
-    if(encodeCharset == null) encodeCharset = Utils.UTF8;
+    if (mediaType != null) encodeCharset = mediaType.charset();
+    if (encodeCharset == null) encodeCharset = Utils.UTF8;
     sink.writeString(content, encodeCharset);
   }
 
-  private Charset charset(){
+  public Charset charset() {
     Charset result = null;
-    if(mediaType != null) result = mediaType.charset();
-    if(result == null) result = Utils.UTF8;
+    if (mediaType != null) result = mediaType.charset();
+    if (result == null) result = Utils.UTF8;
     return result;
   }
 
+  /*if ascii printable character occupies 30%,
+    Quoted-Printable is preferred*/
+  public Encoding preferredEncoding() {
+    final int totalLength = content.length();
+    int asciiCount = 0;
+    for (int i = 0; i < totalLength; i++) {
+    }
+    if (asciiCount / (float) totalLength > 0.3F) {
+      return QUOTED_PRINTABLE;
+    }else{
+      return BASE64;
+    }
+  }
+
   public static TextBody from(String content, MediaType mediaType) {
+    if (!"text".equalsIgnoreCase(mediaType.type())) {
+      throw new IllegalArgumentException("unexpected type: " + mediaType.type());
+    }
+    if(content.isEmpty()){
+      throw new IllegalArgumentException("empty content");
+    }
     return new TextBody(content, mediaType);
   }
 }

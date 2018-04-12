@@ -9,9 +9,11 @@ import java.io.IOException;
 public class QSink implements Sink {
 
   final Sink sink;
+  final int maxLength;
 
-  public QSink(Sink sink) {
+  public QSink(Sink sink, int maxLengthPerLine) {
     this.sink = sink;
+    this.maxLength = maxLengthPerLine;
   }
 
 

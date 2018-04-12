@@ -1,6 +1,9 @@
 package smtp.misc;
 
+import okio.Buffer;
 import okio.BufferedSource;
+import smtp.mail.TextBody;
+import smtp.mime.Encoding;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -17,6 +20,8 @@ public final class Utils {
   public static final int CR = 13;
   public static final int LF = 10;
   public static final int DOT = 45;
+
+  /**line end in smtp protocol*/
   public static final byte[] CRLF = {'\r', '\n'};
 
 

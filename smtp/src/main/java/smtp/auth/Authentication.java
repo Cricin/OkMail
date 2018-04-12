@@ -1,14 +1,10 @@
 package smtp.auth;
 
-import javax.annotation.Nullable;
-
 public final class Authentication {
 
   public static final Authentication NONE = of("", "");
 
-  @Nullable
   final String key;
-  @Nullable
   final String token;
 
   private Authentication(String key, String token) {
@@ -16,12 +12,10 @@ public final class Authentication {
     this.token = token;
   }
 
-  @Nullable
   public String key() {
     return key;
   }
 
-  @Nullable
   public String token() {
     return token;
   }

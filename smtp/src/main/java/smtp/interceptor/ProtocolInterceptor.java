@@ -3,6 +3,7 @@ package smtp.interceptor;
 
 import okio.BufferedSink;
 import okio.BufferedSource;
+import smtp.Channel;
 import smtp.Interceptor;
 import smtp.command.Command;
 import smtp.mail.Mail;
@@ -20,6 +21,7 @@ public class ProtocolInterceptor implements Interceptor {
   private BufferedSource source;
   private BufferedSink sink;
   private Mail mail;
+  private Chain chain;
 
 
   public ProtocolInterceptor(List<Command> smtpCommand) {
@@ -57,7 +59,7 @@ public class ProtocolInterceptor implements Interceptor {
         .writeUtf8(from.name())
         .writeUtf8("@")
         .writeUtf8(from.host())
-        .writeUtf8("\r\n")
+        .write(Utils.CRLF)
         .flush();
 
 
@@ -69,12 +71,18 @@ public class ProtocolInterceptor implements Interceptor {
         .writeUtf8(mailbox.name())
         .writeUtf8("@")
         .writeUtf8(mailbox.host())
-        .writeUtf8("\r\n")
+        .write(Utils.CRLF)
         .flush();
 
   }
 
-  private void doData() {
+  private void doData() throws IOException {
+    sink.writeUtf8("DATA")
+        .write(Utils.CRLF)
+        .flush();
+    int code = Utils.parseCode(source.readUtf8Line());
+
+
 
 
   }
@@ -82,11 +90,11 @@ public class ProtocolInterceptor implements Interceptor {
   protected void doQuit() throws IOException {
     sink.writeUtf8("QUIT\r\n")
         .flush();
-    final String response = source.readUtf8Line();
-
-
-
-
+    //close all network resources
+    final Channel channel = chain.channel();
+    channel.sink().close();
+    channel.source().close();
+    channel.socket().close();
   }
 
 }

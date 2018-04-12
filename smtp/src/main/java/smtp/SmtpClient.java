@@ -15,6 +15,8 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static smtp.mime.Encoding.BASE64;
+
 /**
  * A mail client which allow user send e-mail or any attachment
  * using <a href="http://tools.ietf.org/html/rfc821">RFC 821</a>
@@ -24,6 +26,7 @@ public final class SmtpClient implements Session.SessionFactory {
   private final long connectTimeout;
   private final long readTimeout;
   private final long writeTimeout;
+  private final int maxLengthPerLine;
   private final Dns dns;
   private final SocketFactory socketFactory;
   private final ExecutorService executorService;
@@ -49,6 +52,7 @@ public final class SmtpClient implements Session.SessionFactory {
     connectTimeout = builder.connectTimeout;
     readTimeout = builder.readTimeout;
     writeTimeout = builder.writeTimeout;
+    maxLengthPerLine = builder.maxLengthPerLine;
     channelConnector = builder.channelConnector;
     mailIdGenerator = builder.mailIdGenerator;
     transferEncoding = builder.transferEncoding;
@@ -84,6 +88,10 @@ public final class SmtpClient implements Session.SessionFactory {
     return writeTimeout;
   }
 
+  public int maxLengthPerLine() {
+    return maxLengthPerLine;
+  }
+
   public ChannelConnector channelConnector() {
     return channelConnector;
   }
@@ -96,7 +104,7 @@ public final class SmtpClient implements Session.SessionFactory {
     return transferEncoding;
   }
 
-  public boolean useStartUls(){
+  public boolean useStartUls() {
     return useStartTls;
   }
 
@@ -113,6 +121,7 @@ public final class SmtpClient implements Session.SessionFactory {
     out.connectTimeout = connectTimeout;
     out.readTimeout = readTimeout;
     out.writeTimeout = writeTimeout;
+    out.maxLengthPerLine = maxLengthPerLine;
     out.dns = dns;
     out.socketFactory = socketFactory;
     out.executorService = executorService;
@@ -130,11 +139,12 @@ public final class SmtpClient implements Session.SessionFactory {
     long connectTimeout = 0L;
     long readTimeout = 0L;
     long writeTimeout = 0L;
+    int maxLengthPerLine = 75;//default 75 characters per line
     Dns dns = new SystemDns();
     ChannelConnector channelConnector = Channel.DIRECT;
     SocketFactory socketFactory = SocketFactory.getDefault();
     MailIdGenerator mailIdGenerator = MailIdGenerator.DEFAULT;
-    Encoding transferEncoding;
+    Encoding transferEncoding = BASE64;
     boolean useStartTls = true;
     ExecutorService executorService = new ThreadPoolExecutor(
         0,
@@ -198,8 +208,13 @@ public final class SmtpClient implements Session.SessionFactory {
       return this;
     }
 
-    public Builder useStartTls(boolean useStartTls){
+    public Builder useStartTls(boolean useStartTls) {
       this.useStartTls = useStartTls;
+      return this;
+    }
+
+    public Builder overrideMaxLengthPerLine(int newLength) {
+      this.maxLengthPerLine = (int) Utils.checkNotNegative(newLength);
       return this;
     }
 

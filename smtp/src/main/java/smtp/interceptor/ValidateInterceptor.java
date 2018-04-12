@@ -4,11 +4,17 @@ import smtp.Interceptor;
 import smtp.MailIdGenerator;
 import smtp.Version;
 import smtp.mail.Mail;
+import smtp.mail.MultipartBody;
 import smtp.mail.SmtpDate;
+import smtp.mail.TextBody;
+import smtp.mime.Encoding;
+import smtp.misc.Utils;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Date;
+
+import static smtp.mime.Encoding.AUTO_SELECT;
 
 public class ValidateInterceptor implements Interceptor {
   private final MailIdGenerator idGenerator;
@@ -39,6 +45,17 @@ public class ValidateInterceptor implements Interceptor {
     if (mail.headers().get("Content-Type") == null && mail.body() != null) {
       builder.addHeader("Content-Type", mail.body().contentType().toString());
     }
+    if (mail.body() instanceof MultipartBody) {
+      builder.addHeader("Content-Transfer-Encoding", "8BIT");
+    }
+    if (mail.body() instanceof TextBody) {
+      Encoding encoding = chain.client().transferEncoding();
+      if(encoding == AUTO_SELECT){
+       encoding = ((TextBody)mail.body()).preferredEncoding();
+      }
+      builder.addHeader("Content-Transfer-Encoding", encoding.name());
+    }
+
 
 
     chain.proceed(builder.build());
