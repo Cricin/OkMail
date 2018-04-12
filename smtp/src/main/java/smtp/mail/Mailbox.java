@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 public final class Mailbox {
 
+  @Nullable
   private String displayName;
   private String mailbox;
   private String name;
@@ -48,7 +49,7 @@ public final class Mailbox {
   }
 
   public String canonicalAddress() {
-    return "<" + name+ "@"+ host + ">";
+    return "<" + name + "@" + host + ">";
   }
 
   @Override
@@ -64,6 +65,11 @@ public final class Mailbox {
 
   /**
    * static factory method to create {@link Mailbox} mailbox.
+   * supported three formats below:
+   *
+   * alice@host.com
+   * <alice@host.com>
+   * Alice<alice@host.com>  this format has a display name
    *
    * @param string the mailbox in text form, simply like alice&lt alice@host.com&gt
    * @return parsed Mailbox or null if the specified string format is illegal
@@ -74,11 +80,12 @@ public final class Mailbox {
     String name;
     String host;
     String trimmed = string.trim();
-    if (trimmed.charAt(0) != '<') {
-      displayName = trimmed.substring(trimmed.indexOf('<'));
+
+    if (trimmed.indexOf('<') != -1) {
+      displayName = trimmed.substring(0,trimmed.indexOf('<')).trim();
       name = trimmed.substring(trimmed.indexOf('<') + 1, trimmed.indexOf('@'));
       host = trimmed.substring(trimmed.indexOf('@') + 1, trimmed.indexOf('>'));
-    } else {
+    }else{
       name = trimmed.substring(0, trimmed.indexOf('@'));
       host = trimmed.substring(trimmed.indexOf('@') + 1);
     }

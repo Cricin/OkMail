@@ -3,6 +3,7 @@ package smtp.auth;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import smtp.Channel;
+import smtp.interceptor.Response;
 import smtp.misc.Base64;
 import smtp.misc.Utils;
 
@@ -23,27 +24,29 @@ public interface AuthMethod {
     @SuppressWarnings("ConstantConditions")
     @Override
     public boolean auth(Authentication auth, Channel channel) throws IOException {
+      Utils.d("login with AUTH");
+
       final BufferedSink sink = channel.sink();
       final BufferedSource source = channel.source();
       //send auth login
       sink.writeUtf8("auth login")
           .write(Utils.CRLF)
           .flush();
-      int code = Utils.parseCode(source.readUtf8Line());
+      int code = Response.parseCode(source.readUtf8Line());
 
       //if server want continue, then send our key
       if (code != 334) return false;
-      sink.write(Base64.decode(auth.key))
+      sink.writeUtf8(Base64.encode(auth.key().getBytes(Utils.ASCII)))
           .write(Utils.CRLF)
           .flush();
 
       //if server want continue, then send our token
       code = Utils.parseCode(source.readUtf8Line());
       if (code != 334) return false;
-      sink.write(Base64.decode(auth.token))
+      sink.writeUtf8(Base64.encode(auth.token().getBytes(Utils.ASCII)))
           .write(Utils.CRLF)
           .flush();
-      code = Utils.parseCode(source.readUtf8Line());
+      code = Response.parseCode(source.readUtf8Line());
       return code == 235;
     }
   };
@@ -51,22 +54,26 @@ public interface AuthMethod {
   AuthMethod PLAIN = new AuthMethod() {
     @Override
     public boolean auth(Authentication auth, Channel channel) throws IOException {
+      Utils.d("login with PLAIN");
+
       final BufferedSink sink = channel.sink();
       final BufferedSource source = channel.source();
       //send auth plain
       sink.writeUtf8("auth plain")
           .write(Utils.CRLF)
           .flush();
-      int code = Utils.parseCode(source.readUtf8Line());
+      int code = Response.parseCode(source.readUtf8Line());
       if (code != 334) return false;
 
       //if server want continue, then send our plain auth
       sink.writeByte(0/*ASCII null*/).writeUtf8(auth.key)
           .writeByte(0/*ASCII null*/).writeUtf8(auth.token)
           .write(Utils.CRLF).flush();
-      return false;
+      code = Response.parseCode(source.readUtf8Line());
+      return code == 235;
     }
   };
 
+  //TODO implement more auth method here
 
 }

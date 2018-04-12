@@ -5,7 +5,7 @@ import okio.BufferedSink;
 import okio.BufferedSource;
 import smtp.Channel;
 import smtp.Interceptor;
-import smtp.command.Command;
+import smtp.ServerOptions;
 import smtp.mail.Mail;
 import smtp.mail.Mailbox;
 import smtp.misc.Utils;
@@ -20,19 +20,18 @@ import java.util.List;
 public class ProtocolInterceptor implements Interceptor {
   private BufferedSource source;
   private BufferedSink sink;
-  private Mail mail;
   private Chain chain;
-
-
-  public ProtocolInterceptor(List<Command> smtpCommand) {
-
-  }
 
   @Override
   public void intercept(Chain chain) throws IOException {
-    final BufferedSource source = chain.channel().source();
-    final BufferedSink sink = chain.channel().sink();
-    final List<Mailbox> recipients = chain.mail().recipients();
+    source = chain.channel().source();
+    sink = chain.channel().sink();
+    this.chain = chain;
+
+
+
+    List<Mailbox> recipients = chain.mail().recipients();
+
 
 
     //SMTP MAIL
@@ -54,15 +53,15 @@ public class ProtocolInterceptor implements Interceptor {
 
 
   protected void doMail() throws IOException {
-    final Mailbox from = mail.from();
+    final Mailbox from = chain.mail().from();
     sink.writeUtf8("MAIL FROM: ")
         .writeUtf8(from.name())
         .writeUtf8("@")
         .writeUtf8(from.host())
         .write(Utils.CRLF)
         .flush();
-
-
+    String response = Response.readLine(source);
+    if (Response.parseCode(response) != 250) throwException("MAIL", response);
   }
 
 
@@ -73,16 +72,28 @@ public class ProtocolInterceptor implements Interceptor {
         .writeUtf8(mailbox.host())
         .write(Utils.CRLF)
         .flush();
-
+    String response = Response.readLine(source);
+    if (Response.parseCode(response) != 250) throwException("RCPT", response);
   }
 
   private void doData() throws IOException {
     sink.writeUtf8("DATA")
         .write(Utils.CRLF)
         .flush();
-    int code = Utils.parseCode(source.readUtf8Line());
+    String response = source.readUtf8Line();
+    int code = Response.parseCode(response);
+    if (code != 354) throwException("DATA", response);
 
+    //really send data here
+    doDataInternal();
 
+    code = Response.parseCode(response);
+    if (code != 250) throwException("DATA", response);
+
+  }
+
+  private void doDataInternal() {
+    chain.serverOptions().eightBitMimeSupported();
 
 
   }
@@ -96,5 +107,10 @@ public class ProtocolInterceptor implements Interceptor {
     channel.source().close();
     channel.socket().close();
   }
+
+  private static void throwException(String command, String response) throws IOException {
+    throw new IOException("server denied " + command + ", response = " + response);
+  }
+
 
 }

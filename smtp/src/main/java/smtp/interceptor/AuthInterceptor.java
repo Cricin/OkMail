@@ -22,10 +22,9 @@ public class AuthInterceptor implements Interceptor {
 
     AuthMethod authMethod = chooseAuthMethod(serverOptions);
     if (authMethod == null) throw new IOException("AuthMethod all unavailable");
-    Utils.d("selected auth method: " + authMethod);
 
     boolean succeed = authMethod.auth(auth, chain.channel());
-    if (!succeed) throw new IOException("Authentication failed, auth=" + auth);
+    if (!succeed) throw new IOException("Authentication failed");
     Utils.d("authentication succeed!");
     chain.proceed(chain.mail());
   }

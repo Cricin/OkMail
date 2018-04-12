@@ -1,8 +1,12 @@
 package smtp;
 
-import smtp.auth.Authentication;
-import smtp.command.Command;
-import smtp.interceptor.*;
+import smtp.interceptor.AuthInterceptor;
+import smtp.interceptor.ConfirmInterceptor;
+import smtp.interceptor.ConnectInterceptor;
+import smtp.interceptor.ProtocolInterceptor;
+import smtp.interceptor.RealInterceptorChain;
+import smtp.interceptor.StartTlsInterceptor;
+import smtp.interceptor.ValidateInterceptor;
 import smtp.mail.Mail;
 
 import javax.annotation.Nullable;
@@ -15,19 +19,16 @@ final class RealSession implements Session {
 
   final SmtpClient client;
   final Mail mail;
-  final Authentication auth;
   @Nullable
   final InetAddress serverAddress;
 
   // Guarded by this.
   boolean sent;
 
-  private RealSession(SmtpClient client, Mail mail, @Nullable InetAddress serverAddress,
-                      Authentication auth) {
+  private RealSession(SmtpClient client, Mail mail, @Nullable InetAddress serverAddress) {
     this.client = client;
     this.mail = mail;
     this.serverAddress = serverAddress;
-    this.auth = auth;
   }
 
   @Override
@@ -52,7 +53,7 @@ final class RealSession implements Session {
   @SuppressWarnings("MethodDoesntCallSuperMethod")
   @Override
   public Session clone() {
-    return newRealSession(client, mail, serverAddress, auth);
+    return newRealSession(client, mail, serverAddress);
   }
 
 
@@ -62,16 +63,15 @@ final class RealSession implements Session {
     interceptors.add(new ConnectInterceptor(serverAddress));
     interceptors.add(new ConfirmInterceptor());
     interceptors.add(new StartTlsInterceptor());
-    interceptors.add(new AuthInterceptor(auth));
-    interceptors.add(new ProtocolInterceptor(Command.newCommandsForSession(this)));
+    interceptors.add(new AuthInterceptor(mail.auth()));
+    interceptors.add(new ProtocolInterceptor());
     Interceptor.Chain chain = new RealInterceptorChain(this, interceptors);
     chain.proceed(mail);
   }
 
   static RealSession newRealSession(SmtpClient client,
                                     Mail mail,
-                                    @Nullable InetAddress serverAddress,
-                                    Authentication auth) {
-    return new RealSession(client, mail, serverAddress, auth);
+                                    @Nullable InetAddress serverAddress) {
+    return new RealSession(client, mail, serverAddress);
   }
 }

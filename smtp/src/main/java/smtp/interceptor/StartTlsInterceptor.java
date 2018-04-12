@@ -11,8 +11,7 @@ public class StartTlsInterceptor implements Interceptor {
     final SmtpClient client = chain.client();
     if (client.useStartUls() && chain.serverOptions().startTlsSupported()) {
       //todo establish tls connection here
-    }else{
-      chain.proceed(chain.mail());
     }
+    chain.proceed(chain.mail());
   }
 }

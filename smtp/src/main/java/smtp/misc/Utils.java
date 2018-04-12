@@ -82,18 +82,19 @@ public final class Utils {
     }
   }
 
+
   /*   log  */
 
   public static void i(String msg) {
-    logInternal("i", msg);
+    logInternal("INFO", msg);
   }
 
   public static void d(String msg) {
-    logInternal("d", msg);
+    logInternal("DEBUG", msg);
   }
 
   public static void e(String msg) {
-    logInternal("e", msg);
+    logInternal("ERROR", msg);
   }
 
 

@@ -127,14 +127,29 @@ public final class Base64 {
   };
 
   public static String encode(byte[] in) {
+    final byte[] bytes = encode(in, MAP);
+    try {
+      return new String(bytes, "US-ASCII");
+    } catch (UnsupportedEncodingException e) {
+      throw new AssertionError(e);
+    }
+  }
+
+  public static byte[] encodeToBytes(byte[] in) {
     return encode(in, MAP);
   }
 
+
   public static String encodeUrl(byte[] in) {
-    return encode(in, URL_MAP);
+    final byte[] bytes = encode(in, URL_MAP);
+    try {
+      return new String(bytes, "US-ASCII");
+    } catch (UnsupportedEncodingException e) {
+      throw new AssertionError(e);
+    }
   }
 
-  private static String encode(byte[] in, byte[] map) {
+  private static byte[] encode(byte[] in, byte[] map) {
     int length = (in.length + 2) / 3 * 4;
     byte[] out = new byte[length];
     int index = 0, end = in.length - in.length % 3;
@@ -158,10 +173,7 @@ public final class Base64 {
         out[index++] = '=';
         break;
     }
-    try {
-      return new String(out, "US-ASCII");
-    } catch (UnsupportedEncodingException e) {
-      throw new AssertionError(e);
-    }
+    return out;
   }
+
 }

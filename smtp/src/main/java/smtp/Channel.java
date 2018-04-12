@@ -21,10 +21,10 @@ public interface Channel {
   Socket socket();
 
   @Nonnull
-  BufferedSink sink() throws IOException;
+  BufferedSink sink();
 
   @Nonnull
-  BufferedSource source() throws IOException;
+  BufferedSource source();
 
   ChannelConnector DIRECT = new ChannelConnector() {
     @Override

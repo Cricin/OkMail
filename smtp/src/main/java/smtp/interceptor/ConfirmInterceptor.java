@@ -21,27 +21,20 @@ public class ConfirmInterceptor implements Interceptor {
     final RealInterceptorChain realChain = (RealInterceptorChain) chain;
 
     final String serverMsg = source.readUtf8Line();
-    Utils.d("serverOptions msg: " + serverMsg);
+    Utils.d("server greet msg: " + serverMsg);
     sink.writeUtf8("EHLO")
-        .writeUtf8(Version.version())
+        .writeUtf8(" ")
+        .writeUtf8(Version.versionText())
         .write(Utils.CRLF)
         .flush();
 
-    Utils.d("reading serverOptions metadata");
-    RealServerOptions server = new RealServerOptions(readResponse(source));
-    realChain.setServerOptions(server);
+    Utils.d("reading server options metadata");
+    RealServerOptions serverOptions = new RealServerOptions(Response.readAll(source));
+    Utils.d("options resolved:");
+    Utils.d(serverOptions.toString());
+    realChain.setServerOptions(serverOptions);
+    chain.proceed(chain.mail());
   }
-
-  private String readResponse(BufferedSource source) throws IOException {
-    StringBuilder builder = new StringBuilder();
-    String temp;
-    do {
-      temp = source.readUtf8Line();
-      builder.append(temp);
-    } while (temp == null || temp.charAt(3) != ' ');
-    return builder.toString();
-  }
-
 
   static class RealServerOptions implements ServerOptions {
     private final boolean eightBitMime;
@@ -81,6 +74,15 @@ public class ConfirmInterceptor implements Interceptor {
     @Override
     public List<AuthMethod> authMethods() {
       return authMethods;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder builder = new StringBuilder();
+      builder.append("8BIT: ").append(eightBitMime).append(" ");
+      builder.append("STARTTLS: ").append(startTls).append(" ");
+      builder.append("PIPELINING: ").append(pipeLining);
+      return builder.toString();
     }
   }
 

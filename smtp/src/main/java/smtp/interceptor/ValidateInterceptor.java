@@ -8,7 +8,6 @@ import smtp.mail.MultipartBody;
 import smtp.mail.SmtpDate;
 import smtp.mail.TextBody;
 import smtp.mime.Encoding;
-import smtp.misc.Utils;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class ValidateInterceptor implements Interceptor {
     Mail.Builder builder = mail.newBuilder();
 
     if (mail.headers().get("X-Mailer") == null) {
-      builder.addHeader("X-Mailer", Version.VERSION_TEXT);
+      builder.addHeader("X-Mailer", Version.versionText());
     }
     if (mail.headers().get("Message-Id") == null) {
       builder.addHeader("Message-Id", idGenerator.generate(chain.mail()));

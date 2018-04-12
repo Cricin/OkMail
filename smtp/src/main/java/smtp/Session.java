@@ -18,7 +18,7 @@ public interface Session {
   Session clone();
 
   interface SessionFactory {
-    Session newSession(Mail mail, @Nullable InetAddress serverAddress, Authentication auth);
+    Session newSession(Mail mail, @Nullable InetAddress serverAddress);
   }
 
 }

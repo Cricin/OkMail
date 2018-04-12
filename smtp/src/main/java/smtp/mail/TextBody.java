@@ -1,10 +1,10 @@
 package smtp.mail;
 
 import okio.BufferedSink;
-import smtp.SmtpClient;
 import smtp.mime.Encoding;
 import smtp.misc.Utils;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -12,6 +12,8 @@ import static smtp.mime.Encoding.BASE64;
 import static smtp.mime.Encoding.QUOTED_PRINTABLE;
 
 public class TextBody extends MailBody {
+
+  static final MediaType TEXT_PLAIN = MediaType.parse("text/plain");
 
   private final String content;
   private final MediaType mediaType;
@@ -60,7 +62,8 @@ public class TextBody extends MailBody {
     }
   }
 
-  public static TextBody from(String content, MediaType mediaType) {
+  public static TextBody of(String content,@Nullable MediaType mediaType) {
+    mediaType = (mediaType == null ? TEXT_PLAIN : mediaType);
     if (!"text".equalsIgnoreCase(mediaType.type())) {
       throw new IllegalArgumentException("unexpected type: " + mediaType.type());
     }

@@ -23,74 +23,74 @@ public abstract class MailBody {
 
 
 
-  public static MailBody create(
-      final @Nullable MediaType contentType, final ByteString content) {
-    return new MailBody() {
-      @Override public @Nullable MediaType contentType() {
-        return contentType;
-      }
-
-      @Override public long contentLength() {
-        return content.size();
-      }
-
-      @Override public void writeTo(BufferedSink sink) throws IOException {
-        sink.write(content);
-      }
-    };
-  }
-
-  /** Returns a new request body that transmits {@code content}. */
-  public static MailBody create(final @Nullable MediaType contentType, final byte[] content) {
-    return create(contentType, content, 0, content.length);
-  }
-
-  /** Returns a new request body that transmits {@code content}. */
-  public static MailBody create(final @Nullable MediaType contentType, final byte[] content,
-                                   final int offset, final int byteCount) {
-    if (content == null) throw new NullPointerException("content == null");
-    if ((offset | byteCount) < 0 || offset > content.length || content.length - offset < byteCount) {
-      throw new ArrayIndexOutOfBoundsException();
-    }
-    return new MailBody() {
-      @Override public @Nullable MediaType contentType() {
-        return contentType;
-      }
-
-      @Override public long contentLength() {
-        return byteCount;
-      }
-
-      @Override public void writeTo(BufferedSink sink) throws IOException {
-        sink.write(content, offset, byteCount);
-      }
-    };
-  }
-
-  /** Returns a new request body that transmits the content of {@code file}. */
-  public static MailBody create(final @Nullable MediaType contentType, final File file) {
-    if (file == null) throw new NullPointerException("content == null");
-
-    return new MailBody() {
-      @Override public @Nullable MediaType contentType() {
-        return contentType;
-      }
-
-      @Override public long contentLength() {
-        return file.length();
-      }
-
-      @Override public void writeTo(BufferedSink sink) throws IOException {
-        Source source = null;
-        try {
-          source = Okio.source(file);
-          sink.writeAll(source);
-        } finally {
-          Utils.closeQuietly(source);
-        }
-      }
-    };
-  }
+//  public static MailBody create(
+//      final @Nullable MediaType contentType, final ByteString content) {
+//    return new MailBody() {
+//      @Override public @Nullable MediaType contentType() {
+//        return contentType;
+//      }
+//
+//      @Override public long contentLength() {
+//        return content.size();
+//      }
+//
+//      @Override public void writeTo(BufferedSink sink) throws IOException {
+//        sink.write(content);
+//      }
+//    };
+//  }
+//
+//  /** Returns a new request body that transmits {@code content}. */
+//  public static MailBody create(final @Nullable MediaType contentType, final byte[] content) {
+//    return create(contentType, content, 0, content.length);
+//  }
+//
+//  /** Returns a new request body that transmits {@code content}. */
+//  public static MailBody create(final @Nullable MediaType contentType, final byte[] content,
+//                                   final int offset, final int byteCount) {
+//    if (content == null) throw new NullPointerException("content == null");
+//    if ((offset | byteCount) < 0 || offset > content.length || content.length - offset < byteCount) {
+//      throw new ArrayIndexOutOfBoundsException();
+//    }
+//    return new MailBody() {
+//      @Override public @Nullable MediaType contentType() {
+//        return contentType;
+//      }
+//
+//      @Override public long contentLength() {
+//        return byteCount;
+//      }
+//
+//      @Override public void writeTo(BufferedSink sink) throws IOException {
+//        sink.write(content, offset, byteCount);
+//      }
+//    };
+//  }
+//
+//  /** Returns a new request body that transmits the content of {@code file}. */
+//  public static MailBody create(final @Nullable MediaType contentType, final File file) {
+//    if (file == null) throw new NullPointerException("content == null");
+//
+//    return new MailBody() {
+//      @Override public @Nullable MediaType contentType() {
+//        return contentType;
+//      }
+//
+//      @Override public long contentLength() {
+//        return file.length();
+//      }
+//
+//      @Override public void writeTo(BufferedSink sink) throws IOException {
+//        Source source = null;
+//        try {
+//          source = Okio.source(file);
+//          sink.writeAll(source);
+//        } finally {
+//          Utils.closeQuietly(source);
+//        }
+//      }
+//    };
+//  }
 
 
 

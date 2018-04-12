@@ -111,8 +111,8 @@ public final class SmtpClient implements Session.SessionFactory {
 
   @Override
 
-  public Session newSession(Mail mail, @Nullable InetAddress serverAddress, Authentication auth) {
-    return RealSession.newRealSession(this, mail, serverAddress, auth);
+  public Session newSession(Mail mail, @Nullable InetAddress serverAddress) {
+    return RealSession.newRealSession(this, mail, serverAddress);
   }
 
   public Builder newBuilder() {

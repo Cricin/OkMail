@@ -1,5 +1,7 @@
 package smtp.mail;
 
+import smtp.auth.Authentication;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -7,19 +9,21 @@ import java.util.List;
 
 public final class Mail {
 
-  private final Mailbox from;
-  private final List<Mailbox> recipients;
-  private final List<Mailbox> cc;
-  private final List<Mailbox> bcc;
-  private final Headers headers;
-  private final MailBody mailBody;
-  private final Object tag;
+  final Mailbox from;
+  final List<Mailbox> recipients;
+  final List<Mailbox> cc;
+  final List<Mailbox> bcc;
+  final Headers headers;
+  final MailBody mailBody;
+  final Object tag;
+  final Authentication auth;
 
   private Mail(Builder builder) {
     from = builder.from;
     headers = builder.headers.build();
     mailBody = builder.mailBody;
     tag = builder.tag;
+    auth = builder.auth;
     recipients = Collections.unmodifiableList(new ArrayList<>(builder.recipients));
     cc = Collections.unmodifiableList(new ArrayList<>(builder.cc));
     bcc = Collections.unmodifiableList(new ArrayList<>(builder.bcc));
@@ -53,6 +57,10 @@ public final class Mail {
     return tag;
   }
 
+  public Authentication auth() {
+    return auth;
+  }
+
   public Builder newBuilder() {
     Builder out = new Builder();
     out.from = from;
@@ -62,6 +70,7 @@ public final class Mail {
     out.mailBody = mailBody;
     out.headers = headers.newBuilder();
     out.tag = this.tag;
+    out.auth = auth;
     return out;
   }
 
@@ -76,6 +85,7 @@ public final class Mail {
     private Headers.Builder headers = new Headers.Builder();
     private MailBody mailBody;
     private Object tag;
+    private Authentication auth;
 
     public Builder() {
     }
@@ -141,6 +151,11 @@ public final class Mail {
 
     public Builder body(MailBody mailBody) {
       this.mailBody = mailBody;
+      return this;
+    }
+
+    public Builder auth(Authentication auth) {
+      this.auth = auth;
       return this;
     }
 
