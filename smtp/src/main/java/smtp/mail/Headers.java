@@ -342,23 +342,23 @@ public final class Headers {
     }
 
     private void checkNameAndValue(String name, String value) {
-      if (name == null) throw new NullPointerException("name == null");
-      if (name.isEmpty()) throw new IllegalArgumentException("name is empty");
-      for (int i = 0, length = name.length(); i < length; i++) {
-        char c = name.charAt(i);
-        if (c <= '\u0020' || c >= '\u007f') {
-          throw new IllegalArgumentException(String.format(
-                  "Unexpected char %#04x at %d in header name: %s", (int) c, i, name));
-        }
-      }
-      if (value == null) throw new NullPointerException("value for name " + name + " == null");
-      for (int i = 0, length = value.length(); i < length; i++) {
-        char c = value.charAt(i);
-        if ((c <= '\u001f' && c != '\t') || c >= '\u007f') {
-          throw new IllegalArgumentException(String.format(
-                  "Unexpected char %#04x at %d in %s value: %s", (int) c, i, name, value));
-        }
-      }
+//      if (name == null) throw new NullPointerException("name == null");
+//      if (name.isEmpty()) throw new IllegalArgumentException("name is empty");
+//      for (int i = 0, length = name.length(); i < length; i++) {
+//        char c = name.charAt(i);
+//        if (c <= '\u0020' || c >= '\u007f') {
+//          throw new IllegalArgumentException(String.format(
+//                  "Unexpected char %#04x at %d in header name: %s", (int) c, i, name));
+//        }
+//      }
+//      if (value == null) throw new NullPointerException("value for name " + name + " == null");
+//      for (int i = 0, length = value.length(); i < length; i++) {
+//        char c = value.charAt(i);
+//        if ((c <= '\u001f' && c != '\t') || c >= '\u007f') {
+//          throw new IllegalArgumentException(String.format(
+//                  "Unexpected char %#04x at %d in %s value: %s", (int) c, i, name, value));
+//        }
+//      }
     }
 
     /**

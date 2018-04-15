@@ -6,7 +6,7 @@ import smtp.interceptor.ConnectInterceptor;
 import smtp.interceptor.ProtocolInterceptor;
 import smtp.interceptor.RealInterceptorChain;
 import smtp.interceptor.StartTlsInterceptor;
-import smtp.interceptor.ValidateInterceptor;
+import smtp.interceptor.BridgeInterceptor;
 import smtp.mail.Mail;
 
 import javax.annotation.Nullable;
@@ -59,13 +59,14 @@ final class RealSession implements Session {
 
   private void sendWithInterceptor() throws IOException {
     List<Interceptor> interceptors = new LinkedList<>();
-    interceptors.add(new ValidateInterceptor(client.mailIdGenerator()));
     interceptors.add(new ConnectInterceptor(serverAddress));
     interceptors.add(new ConfirmInterceptor());
+    interceptors.add(new BridgeInterceptor(client.mailIdGenerator()));
     interceptors.add(new StartTlsInterceptor());
     interceptors.add(new AuthInterceptor(mail.auth()));
     interceptors.add(new ProtocolInterceptor());
     Interceptor.Chain chain = new RealInterceptorChain(this, interceptors);
+    ((RealInterceptorChain) chain).setTransferSpec(client.transferSpec());
     chain.proceed(mail);
   }
 

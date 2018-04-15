@@ -1,25 +1,26 @@
 package smtp.mail;
 
 import okio.BufferedSink;
-import smtp.mime.Encoding;
+import smtp.interceptor.TransferSpec;
 import smtp.misc.Utils;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static smtp.mime.Encoding.BASE64;
-import static smtp.mime.Encoding.QUOTED_PRINTABLE;
+import static smtp.mail.Encoding.BASE64;
+import static smtp.mail.Encoding.QUOTED_PRINTABLE;
 
 public class TextBody extends MailBody {
 
-  static final MediaType TEXT_PLAIN = MediaType.parse("text/plain");
+  static final MediaType TEXT_PLAIN = MediaType.parse("text/plain; charset=utf-8");
+  static final MediaType TEXT_HTML = MediaType.parse("text/html; charset=utf-8");
 
-  private final String content;
+  private final String text;
   private final MediaType mediaType;
 
   private TextBody(String content, MediaType mediaType) {
-    this.content = content;
+    this.text = content;
     this.mediaType = mediaType;
   }
 
@@ -29,16 +30,26 @@ public class TextBody extends MailBody {
   }
 
   @Override
-  public long contentLength() {
-    return content.getBytes(charset()).length;
-  }
-
-  @Override
-  public void writeTo(BufferedSink sink) throws IOException {
+  public void writeBody(BufferedSink sink, TransferSpec spec) throws IOException {
     Charset encodeCharset = null;
     if (mediaType != null) encodeCharset = mediaType.charset();
-    if (encodeCharset == null) encodeCharset = Utils.UTF8;
-    sink.writeString(content, encodeCharset);
+    if (encodeCharset == null) encodeCharset = spec.charset();
+    BufferedSink encodingSink = chooseEncoding(spec).from(sink, spec.lengthLimit());
+    encodingSink.writeString(text, encodeCharset);
+    encodingSink.flush();
+  }
+
+  /*if ascii printable character occupies 30%,
+    Quoted-Printable is preferred*/
+  @Override
+  public Encoding transferEncoding() {
+    final int totalLength = text.length();
+    int asciiCount = Utils.asciiCharacterCount(text);
+    if (asciiCount / (float) totalLength > 0.3F) {
+      return QUOTED_PRINTABLE;
+    } else {
+      return BASE64;
+    }
   }
 
   public Charset charset() {
@@ -48,28 +59,24 @@ public class TextBody extends MailBody {
     return result;
   }
 
-  /*if ascii printable character occupies 30%,
-    Quoted-Printable is preferred*/
-  public Encoding preferredEncoding() {
-    final int totalLength = content.length();
-    int asciiCount = 0;
-    for (int i = 0; i < totalLength; i++) {
-    }
-    if (asciiCount / (float) totalLength > 0.3F) {
-      return QUOTED_PRINTABLE;
-    }else{
-      return BASE64;
-    }
-  }
-
-  public static TextBody of(String content,@Nullable MediaType mediaType) {
+  public static TextBody create(String text, @Nullable MediaType mediaType) {
     mediaType = (mediaType == null ? TEXT_PLAIN : mediaType);
     if (!"text".equalsIgnoreCase(mediaType.type())) {
       throw new IllegalArgumentException("unexpected type: " + mediaType.type());
     }
-    if(content.isEmpty()){
-      throw new IllegalArgumentException("empty content");
+    if (text.isEmpty()) {
+      throw new IllegalArgumentException("empty text");
     }
-    return new TextBody(content, mediaType);
+    return new TextBody(text, mediaType);
   }
+
+  public static TextBody plain(String text) {
+    return create(text, TEXT_PLAIN);
+  }
+
+  public static TextBody html(String text) {
+    return create(text, TEXT_HTML);
+  }
+
+
 }

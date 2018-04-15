@@ -1,34 +1,34 @@
 package smtp.interceptor;
 
-import smtp.Interceptor;
-import smtp.MailIdGenerator;
-import smtp.Version;
+import smtp.*;
 import smtp.mail.Mail;
 import smtp.mail.MultipartBody;
 import smtp.mail.SmtpDate;
 import smtp.mail.TextBody;
-import smtp.mime.Encoding;
+import smtp.mail.Encoding;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Date;
 
-import static smtp.mime.Encoding.AUTO_SELECT;
+import static smtp.mail.Encoding.AUTO_SELECT;
+import static smtp.mail.Encoding.BASE64;
+import static smtp.mail.Encoding.EIGHT_BIT;
 
-public class ValidateInterceptor implements Interceptor {
+public class BridgeInterceptor implements Interceptor {
   private final MailIdGenerator idGenerator;
 
-  public ValidateInterceptor(MailIdGenerator idGenerator) {
+  public BridgeInterceptor(MailIdGenerator idGenerator) {
     this.idGenerator = idGenerator;
   }
 
   @Override
   public void intercept(@Nonnull Chain chain) throws IOException {
     Mail mail = chain.mail();
-    assertNotNull(mail.from(), "from == null");
-    assertNotNull(mail.headers().get("Subject"), "subject == null");
     Mail.Builder builder = mail.newBuilder();
 
+    //some mail server recognise mail as invalid or junk if a mail
+    //dose not contains from header
     if (mail.headers().get("X-Mailer") == null) {
       builder.addHeader("X-Mailer", Version.versionText());
     }
@@ -44,23 +44,20 @@ public class ValidateInterceptor implements Interceptor {
     if (mail.headers().get("Content-Type") == null && mail.body() != null) {
       builder.addHeader("Content-Type", mail.body().contentType().toString());
     }
-    if (mail.body() instanceof MultipartBody) {
-      builder.addHeader("Content-Transfer-Encoding", "8BIT");
+    Encoding encoding = mail.body().transferEncoding();
+    if (encoding == AUTO_SELECT) {
+      ServerOptions options = chain.serverOptions();
+      if (options.eightBitMimeSupported()) encoding = BASE64;
+      else encoding = chain.transferSpec().encoding();
     }
-    if (mail.body() instanceof TextBody) {
-      Encoding encoding = chain.client().transferEncoding();
-      if(encoding == AUTO_SELECT){
-       encoding = ((TextBody)mail.body()).preferredEncoding();
-      }
-      builder.addHeader("Content-Transfer-Encoding", encoding.name());
-    }
+    builder.addHeader("Content-Transfer-Encoding", encoding.name());
 
-
-
+    TransferSpec spec = chain.transferSpec()
+        .newBuilder()
+        .encoding(encoding)
+        .build();
+    RealInterceptorChain r = (RealInterceptorChain) chain;
+    r.setTransferSpec(spec);
     chain.proceed(builder.build());
-  }
-
-  private void assertNotNull(Object o, String msg) throws IOException {
-    if (o == null) throw new IOException(msg);
   }
 }

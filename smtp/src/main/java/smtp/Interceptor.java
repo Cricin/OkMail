@@ -1,12 +1,14 @@
 package smtp;
 
+import smtp.interceptor.BridgeInterceptor;
 import smtp.interceptor.ProtocolInterceptor;
+import smtp.interceptor.TransferSpec;
 import smtp.mail.Mail;
 
 import java.io.IOException;
 
 /**
- * @see smtp.interceptor.ValidateInterceptor
+ * @see BridgeInterceptor
  * @see smtp.interceptor.ConnectInterceptor
  * @see smtp.interceptor.AuthInterceptor
  * @see ProtocolInterceptor
@@ -26,6 +28,8 @@ public interface Interceptor {
     Channel channel();
 
     ServerOptions serverOptions();
+
+    TransferSpec transferSpec();
   }
 
 }

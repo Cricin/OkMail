@@ -17,6 +17,13 @@ public class MailboxTest {
     Assert.assertEquals(three.name(), "1278486605");
   }
 
+  @Test
+  public void testDisplayName() {
+    Assert.assertEquals("cricin", Mailbox.parse("cricin<crica@qq.com>").displayName());
+    Assert.assertEquals("1278486605", three.displayName());
+
+  }
+
 
   @Test
   public void testHost() {
@@ -40,13 +47,6 @@ public class MailboxTest {
   }
 
   @Test
-  public void testEquals() {
-//    Assert.assertEquals(one, new Mailbox("cricin@qq.com", "cricin", "qq.com"));
-//    Assert.assertEquals(two, new Mailbox("cricin@126.com", "cricin", "126.com"));
-//    Assert.assertEquals(three, new Mailbox("1278486605@qq.com", "1278486605", "qq.com"));
-  }
-
-  @Test
   public void testToString() {
     Assert.assertEquals(one.toString(), "cricin@qq.com");
     Assert.assertEquals(two.toString(), "cricin@126.com");
@@ -60,5 +60,6 @@ public class MailboxTest {
     Mailbox error = Mailbox.parse("cricin-qq.com");
     Assert.assertNull(error);
   }
+
 
 }

@@ -96,7 +96,7 @@ public class Note {
    *
    * Mime-Version 用来指定Mime的version
    * Content-Type
-   * Content-Transfer-Encoding , 方式有 7bit, 8bit, binary, quoted-printable, base64, ietf-token, x-token
+   * Content-Transfer-Encoding , 方式有 7bit, 8bit, binary, quoted-printable, base64,
    * Content-ID
    * Content-Description
    *

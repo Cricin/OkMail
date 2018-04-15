@@ -29,7 +29,7 @@ public interface AuthMethod {
       final BufferedSink sink = channel.sink();
       final BufferedSource source = channel.source();
       //send auth login
-      sink.writeUtf8("auth login")
+      sink.writeUtf8("AUTH LOGIN")
           .write(Utils.CRLF)
           .flush();
       int code = Response.parseCode(source.readUtf8Line());
@@ -59,7 +59,7 @@ public interface AuthMethod {
       final BufferedSink sink = channel.sink();
       final BufferedSource source = channel.source();
       //send auth plain
-      sink.writeUtf8("auth plain")
+      sink.writeUtf8("AUTH PLAIN")
           .write(Utils.CRLF)
           .flush();
       int code = Response.parseCode(source.readUtf8Line());

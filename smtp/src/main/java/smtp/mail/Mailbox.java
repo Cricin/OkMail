@@ -1,6 +1,8 @@
 package smtp.mail;
 
 
+import smtp.misc.Utils;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -16,6 +18,7 @@ public final class Mailbox {
     this.mailbox = mailbox;
     this.name = name;
     this.host = host;
+    this.displayName = displayName;
   }
 
   @Nonnull
@@ -35,6 +38,7 @@ public final class Mailbox {
 
   @Nonnull
   public String displayName() {
+    if(Utils.isBlank(displayName)) return name;
     return displayName;
   }
 
@@ -74,8 +78,9 @@ public final class Mailbox {
    * @param string the mailbox in text form, simply like alice&lt alice@host.com&gt
    * @return parsed Mailbox or null if the specified string format is illegal
    */
-  @Nonnull
+  @Nullable
   public static Mailbox parse(String string) {
+    if(string.indexOf('@') == -1) return null;
     String displayName = null;
     String name;
     String host;

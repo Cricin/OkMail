@@ -1,21 +1,22 @@
 package smtp;
 
 import smtp.Channel.ChannelConnector;
-import smtp.auth.Authentication;
+import smtp.interceptor.TransferSpec;
 import smtp.mail.Mail;
-import smtp.mime.Encoding;
+import smtp.mail.Encoding;
 import smtp.misc.SystemDns;
 import smtp.misc.Utils;
 
 import javax.annotation.Nullable;
 import javax.net.SocketFactory;
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static smtp.mime.Encoding.BASE64;
+import static smtp.mail.Encoding.AUTO_SELECT;
 
 /**
  * A mail client which allow user send e-mail or any attachment
@@ -26,20 +27,17 @@ public final class SmtpClient implements Session.SessionFactory {
   private final long connectTimeout;
   private final long readTimeout;
   private final long writeTimeout;
-  private final int maxLengthPerLine;
   private final Dns dns;
   private final SocketFactory socketFactory;
   private final ExecutorService executorService;
   private final ChannelConnector channelConnector;
   private final MailIdGenerator mailIdGenerator;
-  private final Encoding transferEncoding;
   private final int defaultPort;
   private final boolean useStartTls;
+  private final TransferSpec transferSpec;
 
 
-  /**
-   * use all default settings to build an client
-   */
+  /** use all default settings to build an client */
   public SmtpClient() {
     this(new Builder());
   }
@@ -52,11 +50,14 @@ public final class SmtpClient implements Session.SessionFactory {
     connectTimeout = builder.connectTimeout;
     readTimeout = builder.readTimeout;
     writeTimeout = builder.writeTimeout;
-    maxLengthPerLine = builder.maxLengthPerLine;
     channelConnector = builder.channelConnector;
     mailIdGenerator = builder.mailIdGenerator;
-    transferEncoding = builder.transferEncoding;
     useStartTls = builder.useStartTls;
+    transferSpec = new TransferSpec.Builder()
+        .charset(builder.charset)
+        .encoding(builder.transferEncoding)
+        .lengthLimit(builder.lengthLimit)
+        .build();
   }
 
   public int defaultPort() {
@@ -88,9 +89,6 @@ public final class SmtpClient implements Session.SessionFactory {
     return writeTimeout;
   }
 
-  public int maxLengthPerLine() {
-    return maxLengthPerLine;
-  }
 
   public ChannelConnector channelConnector() {
     return channelConnector;
@@ -100,14 +98,14 @@ public final class SmtpClient implements Session.SessionFactory {
     return mailIdGenerator;
   }
 
-  public Encoding transferEncoding() {
-    return transferEncoding;
-  }
 
   public boolean useStartUls() {
     return useStartTls;
   }
 
+  public TransferSpec transferSpec() {
+    return transferSpec;
+  }
 
   @Override
 
@@ -121,13 +119,14 @@ public final class SmtpClient implements Session.SessionFactory {
     out.connectTimeout = connectTimeout;
     out.readTimeout = readTimeout;
     out.writeTimeout = writeTimeout;
-    out.maxLengthPerLine = maxLengthPerLine;
     out.dns = dns;
     out.socketFactory = socketFactory;
     out.executorService = executorService;
     out.channelConnector = channelConnector;
     out.mailIdGenerator = mailIdGenerator;
-    out.transferEncoding = transferEncoding;
+    out.transferEncoding = transferSpec.encoding();
+    out.charset = transferSpec.charset();
+    out.lengthLimit = transferSpec.lengthLimit();
     out.useStartTls = useStartTls;
     return out;
   }
@@ -139,12 +138,13 @@ public final class SmtpClient implements Session.SessionFactory {
     long connectTimeout = 0L;
     long readTimeout = 0L;
     long writeTimeout = 0L;
-    int maxLengthPerLine = 75;//default 75 characters per line
+    int lengthLimit = 76;//default 75 characters per line
     Dns dns = new SystemDns();
     ChannelConnector channelConnector = Channel.DIRECT;
     SocketFactory socketFactory = SocketFactory.getDefault();
     MailIdGenerator mailIdGenerator = MailIdGenerator.DEFAULT;
-    Encoding transferEncoding = BASE64;
+    Encoding transferEncoding = AUTO_SELECT;
+    Charset charset = Utils.UTF8;
     boolean useStartTls = true;
     ExecutorService executorService = new ThreadPoolExecutor(
         0,
@@ -203,7 +203,7 @@ public final class SmtpClient implements Session.SessionFactory {
       return this;
     }
 
-    public Builder defaultTransferCodec(Encoding encoding) {
+    public Builder transferEncoding(Encoding encoding) {
       this.transferEncoding = encoding;
       return this;
     }
@@ -213,8 +213,13 @@ public final class SmtpClient implements Session.SessionFactory {
       return this;
     }
 
-    public Builder overrideMaxLengthPerLine(int newLength) {
-      this.maxLengthPerLine = (int) Utils.checkNotNegative(newLength);
+    public Builder maxLineLength(int newLength) {
+      this.lengthLimit = (int) Utils.checkNotNegative(newLength);
+      return this;
+    }
+
+    public Builder charset(Charset charset) {
+      this.charset = charset;
       return this;
     }
 

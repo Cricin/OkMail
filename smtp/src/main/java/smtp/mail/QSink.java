@@ -1,4 +1,4 @@
-package smtp.mime;
+package smtp.mail;
 
 import okio.Buffer;
 import okio.BufferedSink;
@@ -8,7 +8,7 @@ import okio.Timeout;
 
 import java.io.IOException;
 
-public class QSink implements Sink {
+class QSink implements Sink {
 
   final BufferedSink sink;
   final int maxLength;
@@ -31,9 +31,7 @@ public class QSink implements Sink {
         index = writeWithLength(index, "=3D");
       } else if (b == ' ' || b == 9) {//space and tab
 
-      }
-
-      else if (b >= 33 && b <= 126) sink.writeByte(b); //printable ascii characters
+      } else if (b >= 33 && b <= 126) sink.writeByte(b); //printable ascii characters
 
     }
 

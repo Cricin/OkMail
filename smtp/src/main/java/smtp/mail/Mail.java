@@ -167,6 +167,8 @@ public final class Mail {
     public Mail build() {
       if (from == null) throw new IllegalStateException("from == null");
       if (recipients.isEmpty()) throw new IllegalStateException("no recipients");
+      final String subject = headers.get("Subject");
+      if (subject == null || subject.isEmpty()) throw new IllegalStateException("no subject");
       return new Mail(this);
     }
 

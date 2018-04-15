@@ -18,6 +18,7 @@ public class RealInterceptorChain implements Interceptor.Chain {
   private Channel channel;
 
   private ServerOptions serverOptions;
+  private TransferSpec spec;
 
   private Mail mail;
 
@@ -32,7 +33,7 @@ public class RealInterceptorChain implements Interceptor.Chain {
     this.mail = mail;
     if (index < interceptors.size()) {
       final Interceptor i = interceptors.get(index++);
-       i.intercept(this);
+      i.intercept(this);
     }
   }
 
@@ -61,6 +62,15 @@ public class RealInterceptorChain implements Interceptor.Chain {
   @Override
   public ServerOptions serverOptions() {
     return serverOptions;
+  }
+
+  @Override
+  public TransferSpec transferSpec() {
+    return spec;
+  }
+
+  public final void setTransferSpec(TransferSpec spec) {
+    this.spec = spec;
   }
 
   public final void setServerOptions(ServerOptions serverOptions) {

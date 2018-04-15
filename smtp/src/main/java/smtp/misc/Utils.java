@@ -1,9 +1,6 @@
 package smtp.misc;
 
-import okio.Buffer;
 import okio.BufferedSource;
-import smtp.mail.TextBody;
-import smtp.mime.Encoding;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -21,7 +18,7 @@ public final class Utils {
   public static final int LF = 10;
   public static final int DOT = 45;
 
-  /**line end in smtp protocol*/
+  /** line end in smtp protocol */
   public static final byte[] CRLF = {'\r', '\n'};
 
 
@@ -80,6 +77,24 @@ public final class Utils {
     } catch (NumberFormatException nfe) {
       return -1;
     }
+  }
+
+  public static boolean isBlank(String text) {
+    return text == null || text.length() == 0;
+  }
+
+  public static int asciiCharacterCount(String text) {
+    int count = 0;
+    char ch;
+    for (int i = 0; i < text.length(); i++) {
+      ch = text.charAt(i);
+      if (ch >= 0 && ch <= 127) count++;
+    }
+    return count;
+  }
+
+  public static String encodeUtf8B(String text) {
+    return "=?UTF-8?B" + Base64.encode(text.getBytes(UTF8)) + "?=";
   }
 
 

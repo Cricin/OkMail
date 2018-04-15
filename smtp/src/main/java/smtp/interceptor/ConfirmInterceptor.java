@@ -58,7 +58,7 @@ public class ConfirmInterceptor implements Interceptor {
 
     @Override
     public boolean eightBitMimeSupported() {
-      return eightBitMime;
+      return false;
     }
 
     @Override
