@@ -6,14 +6,13 @@ import smtp.mail.MultipartBody;
 import smtp.mail.SmtpDate;
 import smtp.mail.TextBody;
 import smtp.mail.Encoding;
+import smtp.misc.Base64;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Date;
 
-import static smtp.mail.Encoding.AUTO_SELECT;
-import static smtp.mail.Encoding.BASE64;
-import static smtp.mail.Encoding.EIGHT_BIT;
+import static smtp.mail.Encoding.*;
 
 public class BridgeInterceptor implements Interceptor {
   private final MailIdGenerator idGenerator;
@@ -44,18 +43,20 @@ public class BridgeInterceptor implements Interceptor {
     if (mail.headers().get("Content-Type") == null && mail.body() != null) {
       builder.addHeader("Content-Type", mail.body().contentType().toString());
     }
-    Encoding encoding = mail.body().transferEncoding();
-    if (encoding == AUTO_SELECT) {
-      ServerOptions options = chain.serverOptions();
-      if (options.eightBitMimeSupported()) encoding = BASE64;
-      else encoding = chain.transferSpec().encoding();
-    }
-    builder.addHeader("Content-Transfer-Encoding", encoding.name());
 
-    TransferSpec spec = chain.transferSpec()
-        .newBuilder()
-        .encoding(encoding)
-        .build();
+    TransferSpec spec = chain.client().transferSpec();
+    Encoding theEncoding = spec.encoding();
+    if (theEncoding == AUTO_SELECT) {
+      ServerOptions options = chain.serverOptions();
+      if (options.eightBitMimeSupported()) theEncoding = EIGHT_BIT;
+      else {
+        theEncoding = mail.body().transferEncoding();
+      }
+    }
+    spec = spec.newBuilder().encoding(theEncoding).build();
+
+    builder.addHeader("Content-Transfer-Encoding", theEncoding.encodingName());
+
     RealInterceptorChain r = (RealInterceptorChain) chain;
     r.setTransferSpec(spec);
     chain.proceed(builder.build());

@@ -46,7 +46,8 @@ public class TextBody extends MailBody {
     final int totalLength = text.length();
     int asciiCount = Utils.asciiCharacterCount(text);
     if (asciiCount / (float) totalLength > 0.3F) {
-      return QUOTED_PRINTABLE;
+//      return QUOTED_PRINTABLE;
+      return BASE64;
     } else {
       return BASE64;
     }

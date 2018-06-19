@@ -96,7 +96,7 @@ public class MultipartBody extends MailBody {
       }
       if (body instanceof Attachment) {
         final Attachment attachment = (Attachment) body;
-        sink.writeUtf8("Content-Disposition")
+        sink.writeUtf8("Content-Disposition: ")
             .writeUtf8(attachment.contentDisposition())
             .write(CRLF);
       }
@@ -116,7 +116,7 @@ public class MultipartBody extends MailBody {
 
   @Override
   public Encoding transferEncoding() {
-    return Encoding.BASE64;
+    return Encoding.EIGHT_BIT;
   }
 
 

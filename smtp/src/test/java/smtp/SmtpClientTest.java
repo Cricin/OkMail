@@ -17,32 +17,24 @@ public class SmtpClientTest {
 
   @Test
   public void testSend() throws IOException {
-    TextBody textBody = TextBody.plain("这是一个文本内容, 并且有超级超级长的一行遗憾");
+    TextBody textBody = TextBody.plain("这是一个文本内容, 并且有超级超级长的一行 这是一个文本内容, 并且有超级超级长的一行 这是一个文本内容, 并且有超级超级长的一行 这是一个文本内容, 并且有超级超级长的一行");
 
-    final File file = new File("/Users/Cricin/Downloads/中文.jpg");
-
-    Attachment attachment = Attachment.create("文件.jpg", Okio.source(file), MediaType.parse
-        ("image/jpeg"));
-
-    MultipartBody body = new MultipartBody.Builder()
-        .addText(textBody)
-//        .addAttachment(attachment)
-        .build();
+    final File file = new File("/Users/Cricin/Downloads/heart.png");
 
     Mail mail = new Mail
         .Builder()
         .from(Mailbox.parse("炒面君<cricin@cricin.cn>"))
         .addRecipient(Mailbox.parse("炒面<test@cricin.cn>"))
         .subject("炒面！")
-        .body(body)
+        .body(TextBody.plain("这是一个文本"))
         .auth(Authentication.of("cricin", "illusion"))
         .build();
-    SmtpClient client = new SmtpClient.Builder().defaultPort(2500)
+    SmtpClient client = new SmtpClient.Builder().defaultPort(25)
         .build();
 
-//    Session session = client.newSession(mail, InetAddress.getByName("crica.iok.la"));
+    Session session = client.newSession(mail, InetAddress.getByName("crica.iok.la"));
 
-    Session session = client.newSession(mail, InetAddress.getLocalHost());
+//    Session session = client.newSession(mail, InetAddress.getLocalHost());
 
     try {
       session.send();

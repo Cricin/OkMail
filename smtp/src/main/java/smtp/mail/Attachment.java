@@ -1,6 +1,7 @@
 package smtp.mail;
 
 import okio.BufferedSink;
+import okio.Okio;
 import okio.Source;
 import smtp.interceptor.TransferSpec;
 import smtp.misc.Base64;
@@ -8,6 +9,7 @@ import smtp.misc.Utils;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /** a mail attachment */
@@ -65,6 +67,20 @@ public class Attachment extends MailBody {
     if (Utils.isBlank(filename)) throw new IllegalArgumentException("filename = null");
     if (source == null) throw new IllegalArgumentException("source == null");
     if (mediaType == null) mediaType = OCTET_STREAM;
+    return new Attachment(filename, source, mediaType);
+  }
+
+  public static Attachment create(String filename,
+                                  File file,
+                                  @Nullable MediaType mediaType) {
+    if (Utils.isBlank(filename)) throw new IllegalArgumentException("filename = null");
+    if (mediaType == null) mediaType = OCTET_STREAM;
+    Source source;
+    try {
+      source = Okio.source(file);
+    } catch (FileNotFoundException e) {
+      throw new IllegalArgumentException("file: " + file + "not found");
+    }
     return new Attachment(filename, source, mediaType);
   }
 

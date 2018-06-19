@@ -39,13 +39,13 @@ public class ConnectInterceptor implements Interceptor {
     final Dns dns = chain.client().dns();
     final Mail mail = chain.mail();
 
-    Utils.d("connecting to server...");
-
     Channel channel = null;
 
     if (serverAddress != null) {//if user specifies an exactly serverOptions address
+      Utils.d("connecting to server: address "+ serverAddress);
       channel = connector.connect(chain.client(), serverAddress);
     } else { //dns lookup for serverOptions address according to From: header
+      Utils.d("no server address specified, DNS query started");
       final Mailbox from = mail.from();
       List<InetAddress> addresses;
       try {

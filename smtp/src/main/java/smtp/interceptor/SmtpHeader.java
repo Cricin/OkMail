@@ -12,12 +12,13 @@ import java.io.IOException;
 import java.util.List;
 
 import static smtp.mail.Encoding.BASE64;
+import static smtp.misc.Utils.CRLF;
 
 public class SmtpHeader {
   private SmtpHeader() {
   }
 
-  static void writeAllHeaders(BufferedSink sink,
+  public static void writeAllHeaders(BufferedSink sink,
                               Headers headers,
                               TransferSpec spec) throws IOException {
     for (int i = 0, size = headers.size(); i < size; i++) {
@@ -36,24 +37,26 @@ public class SmtpHeader {
                            String value) throws IOException {
     sink.writeUtf8("Subject: ");
     if ((Utils.asciiCharacterCount(value) == value.length())) {
-      sink.writeUtf8(value).write(Utils.CRLF);
+      sink.writeUtf8(value).write(CRLF);
     } else {
-      sink.writeUtf8("=?")
-          .writeUtf8(spec.charset().name())
-          .writeUtf8("?")
-          .writeUtf8(spec.encoding() == BASE64 ? "B" : "Q")
-          .writeUtf8("?");
-
-      byte[] bytes = value.getBytes(spec.charset());
-      String encoded;
-      if (spec.encoding() == BASE64) {
-        encoded = Base64.encode(bytes);
-      } else {
-        encoded = QuotedP.encode(bytes);
-      }
-      sink.writeUtf8(encoded)
-          .writeUtf8("?=")
-          .write(Utils.CRLF);
+      String utf8B = Utils.encodeUtf8B(value);
+      sink.writeUtf8(utf8B).write(CRLF);
+//      sink.writeUtf8("=?")
+//          .writeUtf8(spec.charset().name())
+//          .writeUtf8("?")
+//          .writeUtf8(spec.encoding() == BASE64 ? "B" : "Q")
+//          .writeUtf8("?");
+//
+//      byte[] bytes = value.getBytes(spec.charset());
+//      String encoded;
+//      if (spec.encoding() == BASE64) {
+//        encoded = Base64.encode(bytes);
+//      } else {
+//        encoded = QuotedP.encode(bytes);
+//      }
+//      sink.writeUtf8(encoded)
+//          .writeUtf8("?=")
+//          .write(CRLF);
     }
   }
 
@@ -73,7 +76,7 @@ public class SmtpHeader {
 
     while (true) {
       sink.writeUtf8(header, wroteCount, wroteCount + Math.min(maxLength, remain));
-      sink.write(Utils.CRLF);
+      sink.write(CRLF);
 
       wroteCount += Math.min(maxLength, remain);
       remain = length - wroteCount;
@@ -88,7 +91,7 @@ public class SmtpHeader {
     }
   }
 
-  static void writeMailbox(BufferedSink sink,
+  public static void writeMailbox(BufferedSink sink,
                            TransferSpec spec,
                            String name,
                            List<Mailbox> mailboxes) throws IOException {
@@ -107,21 +110,12 @@ public class SmtpHeader {
 
       } else {
         // if not pure ascii, encode needed
-        sink.writeUtf8("=?")
-            .writeUtf8(spec.charset().name())
-            .writeUtf8("?")
-            .writeUtf8(spec.encoding() == BASE64 ? "B" : "Q")
-            .writeUtf8("?");
-
-        byte[] bytes = displayName.getBytes(spec.charset());
-        String encoded;
-        if (spec.encoding() == BASE64) {
-          encoded = Base64.encode(bytes);
-        } else {
-          encoded = QuotedP.encode(bytes);
-        }
-        sink.writeUtf8(encoded)
-            .writeUtf8("?=");
+//        sink.writeUtf8("=?")
+//            .writeUtf8(spec.charset().name())
+//            .writeUtf8("?")
+//            .writeUtf8(spec.encoding() == BASE64 ? "B" : "Q")
+//            .writeUtf8("?");
+        sink.writeUtf8(Utils.encodeUtf8B(displayName));
       }
       sink.writeUtf8(" ")
           .writeUtf8(mailbox.canonicalAddress());
@@ -131,7 +125,7 @@ public class SmtpHeader {
         sink.writeUtf8(",");
       }
 
-      sink.write(Utils.CRLF);
+      sink.write(CRLF);
     }
   }
 

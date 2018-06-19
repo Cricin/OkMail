@@ -47,12 +47,12 @@ public class ConfirmInterceptor implements Interceptor {
       startTls = response.contains("STARTTLS");
       pipeLining = response.contains("PIPELINING");
       List<AuthMethod> methods = new ArrayList<>();
-      if (response.contains("LOGIN PLAIN")) {
+//      if (response.contains("LOGIN PLAIN")) {
         methods.add(AuthMethod.PLAIN);
-      }
-      if (response.contains("AUTH=LOGIN")) {
+//      }
+//      if (response.contains("AUTH=LOGIN")) {
         methods.add(AuthMethod.AUTH);
-      }
+//      }
       authMethods = Collections.unmodifiableList(methods);
     }
 

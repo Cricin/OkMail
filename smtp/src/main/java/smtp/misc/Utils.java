@@ -1,11 +1,19 @@
 package smtp.misc;
 
+import okio.BufferedSink;
 import okio.BufferedSource;
+import okio.Okio;
+import smtp.interceptor.SmtpBody;
+import smtp.interceptor.SmtpHeader;
+import smtp.interceptor.TransferSpec;
+import smtp.mail.Mail;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
 
@@ -94,7 +102,25 @@ public final class Utils {
   }
 
   public static String encodeUtf8B(String text) {
-    return "=?UTF-8?B" + Base64.encode(text.getBytes(UTF8)) + "?=";
+    return "=?UTF-8?B?" + Base64.encode(text.getBytes(UTF8)) + "?=";
+  }
+
+
+  public static void dumpMail(Mail mail, TransferSpec spec, OutputStream out) throws IOException{
+    final BufferedSink sink = Okio.buffer(Okio.sink(out));
+    SmtpHeader.writeAllHeaders(sink, mail.headers(), spec);
+
+    SmtpHeader.writeMailbox(sink, spec, "From", Collections.singletonList(mail.from()));
+    SmtpHeader.writeMailbox(sink, spec,"To", mail.recipients());
+    SmtpHeader.writeMailbox(sink, spec,"Cc", mail.cc());
+    SmtpHeader.writeMailbox(sink, spec,"Bcc", mail.bcc());
+
+    sink.write(Utils.CRLF);
+
+    SmtpBody.writeBodies(sink, mail.body(), spec);
+
+    sink.writeUtf8(".\r\n");
+    sink.flush();
   }
 
 

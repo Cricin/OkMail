@@ -24,7 +24,7 @@ public interface AuthMethod {
     @SuppressWarnings("ConstantConditions")
     @Override
     public boolean auth(Authentication auth, Channel channel) throws IOException {
-      Utils.d("login with AUTH");
+//      Utils.d("login with AUTH");
 
       final BufferedSink sink = channel.sink();
       final BufferedSource source = channel.source();
