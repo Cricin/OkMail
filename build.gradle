@@ -10,7 +10,6 @@ allprojects { p->
     p.sourceCompatibility = JavaVersion.VERSION_1_7
   }
 }
-
 //统计所有project的java代码行数
 tasks.create('countLine') {
   doFirst {

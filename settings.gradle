@@ -1,7 +1,4 @@
 
-//include 'common'
 include 'smtp'
 
 include 'demo'
-//include 'pop3'
-//include 'web'
