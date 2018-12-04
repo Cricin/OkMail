@@ -2,6 +2,7 @@ apply plugin: 'java'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 
+version = '0.0.1'
 
 dependencies {
   testCompile 'junit:junit:4.12'
@@ -10,4 +11,10 @@ dependencies {
   compileOnly 'dnsjava:dnsjava:2.1.7' //this is optional
   compile 'com.squareup.okio:okio:1.13.0'
 }
+
+task sourceJar (type:Jar) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
 

@@ -37,6 +37,6 @@ public class AuthInterceptor implements Interceptor {
     if (methods.contains(AuthMethod.PLAIN)) {
       return AuthMethod.PLAIN;
     }
-    return methods.isEmpty() ? null : methods.get(0);
+    return methods.isEmpty() ? AuthMethod.AUTH : methods.get(0);
   }
 }

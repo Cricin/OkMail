@@ -26,10 +26,13 @@ public interface Channel {
   @Nonnull
   BufferedSource source();
 
+  @Nonnull
+  InetAddress address();
+
   ChannelConnector DIRECT = new ChannelConnector() {
     @Override
     public Channel connect(SmtpClient client,
-                           InetAddress address) throws IOException {
+                           final InetAddress address) throws IOException {
       final Socket socket = client.socketFactory().createSocket();
       socket.connect(new InetSocketAddress(address, client.defaultPort()),
           (int) client.connectTimeout());
@@ -56,6 +59,12 @@ public interface Channel {
         @Override
         public BufferedSource source() {
           return source;
+        }
+
+        @Nonnull
+        @Override
+        public InetAddress address() {
+          return address;
         }
       };
     }
